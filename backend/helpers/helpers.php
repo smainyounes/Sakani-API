@@ -1,18 +1,5 @@
 <?php 
 
-	function shortenText($text, $chars = 15)
-	{
-	
-		if (strlen($text) > $chars+1) // if you want...
-		{
-		    $text = substr($text, 0, $chars);
-		    return $text." ...";
-		}else{
-			return $text;
-		}
-	}
-
-
 	function DeletePic($link)
 	{
 		if (file_exists($link)) {
@@ -68,6 +55,64 @@
 		}		
 
 		return $all;
+	}
+
+	function compressImage($source, $destination, $quality = 90)
+	{
+		$info = getimagesize($source);
+		switch ($info['mime']) {
+			case 'image/jpeg':
+				$image = imagecreatefromjpeg($source);
+				break;
+			case 'image/png':
+				$image = imagecreatefrompng($source);
+				break;
+			case 'image/gif':
+				$image = imagecreatefromgif($source);
+				break;
+		}
+	     imagejpeg($image, $destination, $quality);
+	}
+
+	function UploadPic($file, $dir = "img/", $prefix = "")
+	{
+		$imagetype = array(image_type_to_mime_type(IMAGETYPE_GIF), image_type_to_mime_type(IMAGETYPE_JPEG),
+		    image_type_to_mime_type(IMAGETYPE_PNG), image_type_to_mime_type(IMAGETYPE_BMP));
+
+		if ($file['name'] !== "" && $file['error'] == 0) {
+			// file uploaded
+			if (in_array($file["type"], $imagetype)) {
+				// accepted file type
+				$file_extention = @strtolower(@end(@explode(".", $file["name"])));
+				$file_name = $prefix."_". date("YmdHis") . rand(10000, 9999999) . ".";
+
+				if ($file['size'] < (2 * 1000 * 1000)) {
+					// perfect size 
+					if (move_uploaded_file($file['tmp_name'], $dir . $file_name . $file_extention)) {
+						// file moved
+						return array('status' => 'success', 'filename' => $file_name . $file_extention);
+					}else{
+						return array('status' => 'error', 'msg' => 'file could not be moved');
+					}
+				}else{
+					// file too big so compress
+					compressImage($file["tmp_name"], $dir . $file_name . "jpeg");
+					if (file_exists($dir . $file_name . "jpeg")) {
+						// file been compressed
+						return array('status' => 'success', 'filename' => $file_name . "jpeg");
+					}else{
+						// file wasnt compressed
+						return array('status' => 'error', 'msg' => 'file could not be compressed');
+					}					
+				}
+			}else{
+				// file type not accepted
+				return array('status' => 'error', 'msg' => 'file type not accepted');
+			}
+		}else{
+			// file didnt upload
+			return array('status' => 'error', 'msg' => 'file could not be uploaded');
+		}
 	}
 
  ?>
