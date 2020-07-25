@@ -15,6 +15,15 @@
 		 * Getters
 		 */
 
+		public function GetLatest($limit = 9)
+		{
+			$this->query("SELECT * FROM agence ORDER BY id_agence DESC LIMIT :num");
+
+			$this->bind(":num", $limit);
+
+			return $this->resultSet();
+		}
+
 		public function Detail($id_agence)
 		{
 			$this->query("SELECT * FROM agence WHERE id_agence = :id");
@@ -48,24 +57,42 @@
 			}
 		}
 
+		public function TestOwner($id_local)
+		{
+			if (isset($_SESSION['agence'])) {
+				$this->query("SELECT * FROM local WHERE id_agence = :id_agence AND id_local = :id_local");
+
+				$this->bind(":id_local", $id_local);
+				$this->bind(":id_agence", $_SESSION['agence']);
+
+				$res = $this->single();
+				
+				if ($res) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		/**
 		 * Setters
 		 */
 
 		public function Inscription()
 		{
-			$this->db->query("INSERT INTO agence (`email`, `nom`, `address`, `password`, `tel1`, `tel2`, `fb`, `date_exp`,`registre`, `local`)
+			$this->query("INSERT INTO agence (`email`, `nom`, `address`, `password`, `tel1`, `tel2`, `fb`, `date_exp`,`registre`, `local`)
 			VALUES (:email, :nom, :address, '$password', :tel1, :tel2, :fb, '$date_exp','$registre', '$local');");
 
-			$this->db->bind(":email",strip_tags(trim($_POST['email'])));
-			$this->db->bind(":nom",strip_tags(trim($_POST['nom'])));
-			$this->db->bind(":address",strip_tags(trim($_POST['address'])));
-			$this->db->bind(":tel1",strip_tags(trim($_POST['tel1'])));
-			$this->db->bind(":tel2", strip_tags($_POST['tel2']));
-			$this->db->bind(":fb", strip_tags($_POST['fb']));
+			$this->bind(":email",strip_tags(trim($_POST['email'])));
+			$this->bind(":nom",strip_tags(trim($_POST['nom'])));
+			$this->bind(":address",strip_tags(trim($_POST['address'])));
+			$this->bind(":tel1",strip_tags(trim($_POST['tel1'])));
+			$this->bind(":tel2", strip_tags($_POST['tel2']));
+			$this->bind(":fb", strip_tags($_POST['fb']));
 
 			try {
-				$this->db->execute();
+				$this->execute();
 				return true;
 			} catch (Exception $e) {
 				return false;
@@ -74,14 +101,14 @@
 
 		public function UpdateInfos()
 		{
-			$this->db->query("UPDATE `agence` SET `tel1` =:tel1 , `tel2` =:tel2 , `fb` =:fb  WHERE `id_agence`=".$_SESSION['user']." ;");
+			$this->query("UPDATE `agence` SET `tel1` =:tel1 , `tel2` =:tel2 , `fb` =:fb  WHERE `id_agence`=".$_SESSION['user']." ;");
 
-			$this->db->bind(":tel1", strip_tags(trim($_POST['tel1'])));
-			$this->db->bind(":tel2", $tel2);
-			$this->db->bind(":fb", $fb);
+			$this->bind(":tel1", strip_tags(trim($_POST['tel1'])));
+			$this->bind(":tel2", $tel2);
+			$this->bind(":fb", $fb);
 			
 			try {
-				$this->db->execute();
+				$this->execute();
 				return true;
 			} catch (Exception $e) {
 				return false;
