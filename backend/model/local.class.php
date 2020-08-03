@@ -24,7 +24,7 @@
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-					WHERE agence.etat = :etat AND local.etat = :etat2 ORDER BY local.id_local DESC $limit OFFSET $start";
+					WHERE agence.etat = :etat AND local.etat = :etat2 ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
 			$this->bind(":etat", "active");
@@ -43,7 +43,7 @@
 			return $this->single();
 		}
 
-		public function ByAgence($id_agence, $page)
+		public function ByAgence($id_agence, $page, $owner)
 		{
 			$limit = 20;
 			$start = ($page - 1) * $limit;
@@ -51,7 +51,7 @@
 			$conc = "";
 			$etat = "";
 
-			if (isset($_SESSION['agence'])) {
+			if ($owner) {
 				$conc = "AND local.etat != :etat";
 				$etat = "deleted";
 			}else{
@@ -63,7 +63,7 @@
 							FROM ((local
 							INNER JOIN agence ON local.id_agence = agence.id_agence)
 							LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-							WHERE agence.id_agence = :id $conc ORDER BY local.id_local DESC $limit OFFSET $start";
+							WHERE agence.id_agence = :id $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
 
@@ -88,7 +88,7 @@
 				$conc .= " AND local.commune = :commune";
 			}
 
-			if ($categ !== "tout") {
+			if ($type !== "tout") {
 				$conc .= " AND local.type = :type";
 			}
 
@@ -100,7 +100,7 @@
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-					WHERE agence.etat = :etat AND local.etat = :etat2 $conc ORDER BY local.id_local DESC $limit OFFSET $start";
+					WHERE agence.etat = :etat AND local.etat = :etat2 $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
 
@@ -139,7 +139,7 @@
 				$conc .= " AND local.commune = :commune";
 			}
 
-			if ($categ !== "tout") {
+			if ($type !== "tout") {
 				$conc .= " AND local.type = :type";
 			}
 
@@ -175,6 +175,27 @@
 			return $res->nbr;
 		}
 
+		public function CountByAgence($id_agence, $owner)
+		{
+			if ($owner) {
+				$conc = "AND local.etat != :etat";
+				$etat = "deleted";
+			}else{
+				$conc = "AND agence.etat = :etat AND local.etat = :etat";
+				$etat = "active";
+			}
+
+			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE id_agence = :id $conc";
+
+			$this->query($sql);
+
+			$this->bind(":id", $id_agence);
+			$this->bind(":etat", $etat);
+
+			$res = $this->single();
+			return $res->nbr;
+		}
+
 		public function Suggest($wilaya, $commune)
 		{
 			# code...
@@ -201,12 +222,12 @@
 		 * Setters
 		 */
 
-		public function AjouterInfos()
+		public function AjouterInfos($id_local)
 		{
 			switch (strtolower($_POST['type'])) {
 				case 'appartement':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pri, 0, :etat)");
-					$this->bind(":id", $_SESSION['user']);
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :descr, :pri, 0, :etat)");
+					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
 					$this->bind(":ty", strip_tags(trim($_POST['type'])));
@@ -215,13 +236,14 @@
 					$this->bind(":nc", strip_tags(trim($_POST['nbr_chambre'])));
 					$this->bind(":et", strip_tags(trim($_POST['etage'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
+					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
 					$this->bind(":etat", "desactive");
 					break;
 				
 				case 'villa':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard :pri, 0, :etat)");
-					$this->bind(":id", $_SESSION['user']);
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard, :descr, :pri, 0, :etat)");
+					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
 					$this->bind(":ty", strip_tags(trim($_POST['type'])));
@@ -233,13 +255,14 @@
 					$this->bind(":pisc", strip_tags(trim($_POST['piscine'])));
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
+					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
 					$this->bind(":etat", "desactive");
 					break;
 				
 				case 'arab':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :pri, 0, :etat)");
-					$this->bind(":id", $_SESSION['user']);
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :descr, :pri, 0, :etat)");
+					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
 					$this->bind(":ty", strip_tags(trim($_POST['type'])));
@@ -249,31 +272,34 @@
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
+					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
 					$this->bind(":etat", "desactive");
 					break;
 				
 				case 'studio':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :pri, 0, :etat)");
-					$this->bind(":id", $_SESSION['user']);
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :descr, :pri, 0, :etat)");
+					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
 					$this->bind(":ty", strip_tags(trim($_POST['type'])));
 					$this->bind(":vl", strip_tags(trim($_POST['vl'])));
 					$this->bind(":sur", strip_tags(trim($_POST['surface'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
+					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
 					$this->bind(":etat", "desactive");
 					break;
 				
 				case 'terrain':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :pri, 0, :etat)");
-					$this->bind(":id", $_SESSION['user']);
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :descr, :pri, 0, :etat)");
+					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
 					$this->bind(":ty", strip_tags(trim($_POST['type'])));
 					$this->bind(":vl", strip_tags(trim($_POST['vl'])));
 					$this->bind(":sur", strip_tags(trim($_POST['surface'])));
+					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
 					$this->bind(":etat", "desactive");
 					break;

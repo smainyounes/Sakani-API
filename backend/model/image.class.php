@@ -43,9 +43,10 @@
 
 			try {
 				$this->execute();
-				return true;
+				return array('state' => 'success', 'data' => ['filename' => PUBLIC_URL.'img/'.$img_name, 'id_img' => $this->LastId()]);
+				
 			} catch (Exception $e) {
-				return false;
+				return array('state' => 'error', 'data' => ['msg' => 'img was not inserted in the database']);
 			}
 		}
 
