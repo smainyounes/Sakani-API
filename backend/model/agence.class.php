@@ -48,19 +48,13 @@
 				$tokken = $this->GenTokken();
 				
 				if (isset($tokken)) {
-					$resp['state'] = 'success';
-					$resp['data'] = ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken];
-					return $resp;
+					return ['status' => 'success', 'data' => ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken]];
 				}else{
-					$resp['state'] = 'error';
-					$resp['data'] = ['msg' => 'tokken could not be generated'];
-					return $resp;
+					return ['status' => 'error', 'data' => ['msg' => 'tokken could not be generated']];
 				}
 				
 			}else{
-				$resp['state'] = 'error';
-				$resp['data'] = ['msg' => 'wrong username or password'];
-				return $resp;
+				return ['status' => 'error', 'data' => ['msg' => 'wrong username or password']];
 			}
 		}
 
@@ -73,6 +67,21 @@
 
 			$res = $this->single();
 
+			if ($res) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public function TestOwner($id_agence, $id_local)
+		{
+			$this->query("SELECT id_local FROM local WHERE id_local = :id_local AND id_agence = :id_agence");
+
+			$this->bind(":id_local", $id_local);
+			$this->bind(":id_agence", $id_agence);
+
+			$res = $this->single();
 			if ($res) {
 				return true;
 			}else{
