@@ -33,15 +33,6 @@
 			return $this->single();
 		}
 
-		public function GetConnectedInfos()
-		{
-			if (isset($_SESSION['agence'])) {
-				return $this->Detail($_SESSION['agence']);
-			}else{
-				return null;
-			}
-		}
-
 		public function Login()
 		{
 			$this->query("SELECT * FROM agence WHERE email = :email");
@@ -49,47 +40,93 @@
 			$this->bind(":email", $_POST['email']);
 
 			$res = $this->single();
+			$resp = [];
+
 			if ($res && password_verify($_POST['password'], $res->password)) {
-				$_SESSION['agence'] = $res->id_agence;
+				// $_SESSION['agence'] = $res->id_agence;
+				// generate and insert tokken
+				$tokken = $this->GenTokken();
+				
+				if (isset($tokken)) {
+					$resp['state'] = 'success';
+					$resp['data'] = ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken];
+					return $resp;
+				}else{
+					$resp['state'] = 'error';
+					$resp['data'] = ['msg' => 'tokken could not be generated'];
+					return $resp;
+				}
+				
+			}else{
+				$resp['state'] = 'error';
+				$resp['data'] = ['msg' => 'wrong username or password'];
+				return $resp;
+			}
+		}
+
+		public function CheckAgence($id_agence, $tokken)
+		{
+			$this->query("SELECT id_agence FROM agence WHERE id_agence = :id AND tokken IS NOT NULL AND tokken = :tokken");
+
+			$this->bind(":id", $id_agence);
+			$this->bind(":tokken", $tokken);
+
+			$res = $this->single();
+
+			if ($res) {
 				return true;
 			}else{
 				return false;
 			}
 		}
 
-		public function TestOwner($id_local)
-		{
-			if (isset($_SESSION['agence'])) {
-				$this->query("SELECT * FROM local WHERE id_agence = :id_agence AND id_local = :id_local");
-
-				$this->bind(":id_local", $id_local);
-				$this->bind(":id_agence", $_SESSION['agence']);
-
-				$res = $this->single();
-				
-				if ($res) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		/**
 		 * Setters
 		 */
 
+		public function GenTokken($id_agence)
+		{
+			$tokken = token(10) . uniqid();
+			$this->query("UPDATE agence SET tokken = :tokken WHERE id_agence = :id");
+
+			$this->bind(":tokken", $tokken);
+			$this->bind(":id", $id_agence);
+
+			try {
+				$this->execute();
+				return $tokken;
+			} catch (Exception $e) {
+				return null;
+			}
+		}
+
 		public function Inscription()
 		{
-			$this->query("INSERT INTO agence (`email`, `nom`, `address`, `password`, `tel1`, `tel2`, `fb`, `date_exp`,`registre`, `local`)
-			VALUES (:email, :nom, :address, '$password', :tel1, :tel2, :fb, '$date_exp','$registre', '$local');");
+			$this->query("INSERT INTO agence (`email`, `nom`, `address`, `password`, `tel1`, `tel2`, `fb`)
+			VALUES (:email, :nom, :address, :password, :tel1, :tel2, :fb)");
 
 			$this->bind(":email",strip_tags(trim($_POST['email'])));
 			$this->bind(":nom",strip_tags(trim($_POST['nom'])));
 			$this->bind(":address",strip_tags(trim($_POST['address'])));
+			$this->bind(":password", password_hash($_POST['password'], PASSWORD_DEFAULT));
 			$this->bind(":tel1",strip_tags(trim($_POST['tel1'])));
 			$this->bind(":tel2", strip_tags($_POST['tel2']));
 			$this->bind(":fb", strip_tags($_POST['fb']));
+
+			try {
+				$this->execute();
+				return $this->LastId();
+			} catch (Exception $e) {
+				return 0;
+			}
+		}
+
+		public function ImgLocal($id_agence, $link)
+		{
+			$this->query("UPDATE agence SET local = :link WHERE id_agence = :id");
+
+			$this->bind(":link", $link);
+			$this->bind(":id", $id_agence);
 
 			try {
 				$this->execute();
@@ -99,13 +136,29 @@
 			}
 		}
 
-		public function UpdateInfos()
+		public function ImgRC($id_agence, $link)
 		{
-			$this->query("UPDATE `agence` SET `tel1` =:tel1 , `tel2` =:tel2 , `fb` =:fb  WHERE `id_agence`=".$_SESSION['user']." ;");
+			$this->query("UPDATE agence SET registre = :link WHERE id_agence = :id");
+
+			$this->bind(":link", $link);
+			$this->bind(":id", $id_agence);
+
+			try {
+				$this->execute();
+				return true;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
+		public function UpdateInfos($id_agence)
+		{
+			$this->query("UPDATE `agence` SET `tel1` =:tel1 , `tel2` =:tel2 , `fb` =:fb  WHERE `id_agence`= :id");
 
 			$this->bind(":tel1", strip_tags(trim($_POST['tel1'])));
-			$this->bind(":tel2", $tel2);
-			$this->bind(":fb", $fb);
+			$this->bind(":tel2", strip_tags($_POST['tel2']));
+			$this->bind(":fb", strip_tags($_POST['fb']));
+			$this->bind(":id", $id_agence);
 			
 			try {
 				$this->execute();
@@ -115,12 +168,12 @@
 			}			
 		}
 
-		public function ChangePassword()
+		public function ChangePassword($id_agence)
 		{
 			$this->query("UPDATE agence SET password = :password WHERE id_agence = :id");
 			
 			$this->bind(":password", password_hash($_POST['password'], PASSWORD_DEFAULT));
-			$this->bind(":id", $_SESSION['agence']);
+			$this->bind(":id", $id_agence);
 
 			try {
 				$this->execute();
@@ -135,7 +188,7 @@
 			$this->query("UPDATE agence SET img_prof = :img_prof WHERE id_agence = :id");
 			
 			$this->bind(":img_prof", $link);
-			$this->bind(":id", $_SESSION['agence']);
+			$this->bind(":id", $id_agence);
 
 			try {
 				$this->execute();
@@ -150,7 +203,7 @@
 			$this->query("UPDATE agence SET img_cover = :img_cover WHERE id_agence = :id");
 			
 			$this->bind(":img_cover", $link);
-			$this->bind(":id", $_SESSION['agence']);
+			$this->bind(":id", $id_agence);
 
 			try {
 				$this->execute();
@@ -160,11 +213,19 @@
 			}
 		}
 
-		public function Logout()
+		public function Logout($id_agence, $tokken)
 		{
-			if(isset($_SESSION['agence'])){
-				unset($_SESSION['agence']);
-				return true;
+			if ($this->CheckAgence($id_agence, $tokken)) {
+				$this->query("UPDATE agence SET tokken = NULL WHERE id_agence = :id");
+
+				$this->bind(":id", $id_agence);
+
+				try {
+					$this->execute();
+					return true;
+				} catch (Exception $e) {
+					return false;
+				}
 			}else{
 				return false;
 			}
