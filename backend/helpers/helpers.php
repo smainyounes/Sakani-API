@@ -74,7 +74,7 @@
 	     imagejpeg($image, $destination, $quality);
 	}
 
-	function UploadPic($file, $dir = "img/", $prefix = "")
+	function UploadPic($file, $prefix = "", $dir = "img/")
 	{
 		$imagetype = array(image_type_to_mime_type(IMAGETYPE_GIF), image_type_to_mime_type(IMAGETYPE_JPEG),
 		    image_type_to_mime_type(IMAGETYPE_PNG), image_type_to_mime_type(IMAGETYPE_BMP));
@@ -90,28 +90,28 @@
 					// perfect size 
 					if (move_uploaded_file($file['tmp_name'], $dir . $file_name . $file_extention)) {
 						// file moved
-						return array('status' => 'success', 'filename' => $file_name . $file_extention);
+						return array('status' => 'success', 'data' => ['filename' => $file_name . $file_extention]);
 					}else{
-						return array('status' => 'error', 'msg' => 'file could not be moved');
+						return array('status' => 'error', 'data' => ['msg' => 'file could not be moved']);
 					}
 				}else{
 					// file too big so compress
 					compressImage($file["tmp_name"], $dir . $file_name . "jpeg");
 					if (file_exists($dir . $file_name . "jpeg")) {
 						// file been compressed
-						return array('status' => 'success', 'filename' => $file_name . "jpeg");
+						return array('status' => 'success', 'data' => ['filename' => $file_name . "jpeg"]);
 					}else{
 						// file wasnt compressed
-						return array('status' => 'error', 'msg' => 'file could not be compressed');
+						return array('status' => 'error', 'data' => ['msg' => 'file could not be compressed']);
 					}					
 				}
 			}else{
 				// file type not accepted
-				return array('status' => 'error', 'msg' => 'file type not accepted');
+				return array('status' => 'error', 'data' => ['msg' => 'file type not accepted']);
 			}
 		}else{
 			// file didnt upload
-			return array('status' => 'error', 'msg' => 'file could not be uploaded');
+			return array('status' => 'error', 'data' => ['msg' => 'file could not be uploaded']);
 		}
 	}
 
