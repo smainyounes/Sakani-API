@@ -24,7 +24,7 @@
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-					WHERE agence.etat = :etat AND local.etat = :etat2 ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
+					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
 			$this->bind(":etat", "active");
@@ -35,7 +35,7 @@
 
 		public function Detail($id_local)
 		{
-			$this->query("SELECT * FROM local WHERE id_local = :id AND etat = :etat");
+			$this->query("SELECT * FROM local WHERE id_local = :id AND etat_local = :etat");
 
 			$this->bind(":id", $id_local);
 			$this->bind(":etat", "active");
@@ -52,10 +52,10 @@
 			$etat = "";
 
 			if ($owner) {
-				$conc = "AND local.etat != :etat";
+				$conc = "AND local.etat_local != :etat";
 				$etat = "deleted";
 			}else{
-				$conc = "AND agence.etat = :etat AND local.etat = :etat";
+				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat";
 				$etat = "active";
 			}
 
@@ -100,7 +100,7 @@
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-					WHERE agence.etat = :etat AND local.etat = :etat2 $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
+					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
 
@@ -147,7 +147,7 @@
 				$conc .= " AND local.vl = :vl";
 			}
 
-			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE agence.etat = :etat AND local.etat = :etat2 $conc";
+			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 $conc";
 
 			$this->query($sql);
 
@@ -178,10 +178,10 @@
 		public function CountByAgence($id_agence, $owner)
 		{
 			if ($owner) {
-				$conc = "AND local.etat != :etat";
+				$conc = "AND local.etat_local != :etat";
 				$etat = "deleted";
 			}else{
-				$conc = "AND agence.etat = :etat AND local.etat = :etat";
+				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat";
 				$etat = "active";
 			}
 
@@ -207,7 +207,7 @@
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
-					WHERE agence.etat = :etat AND local.etat = :etat2 ORDER BY local.id_local DESC LIMIT :lim";
+					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY local.id_local DESC LIMIT :lim";
 
 			$this->query($sql);
 
@@ -226,7 +226,7 @@
 		{
 			switch (strtolower($_POST['type'])) {
 				case 'appartement':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :descr, :pri, 0, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -242,7 +242,7 @@
 					break;
 				
 				case 'villa':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard, :descr, :pri, 0, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -261,7 +261,7 @@
 					break;
 				
 				case 'arab':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :descr, :pri, 0, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -278,7 +278,7 @@
 					break;
 				
 				case 'studio':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :descr, :pri, 0, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -292,7 +292,7 @@
 					break;
 				
 				case 'terrain':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, description_local, prix, vu, etat) VALUES(:id, :wil, :com, :ty, :vl, :sur, :descr, :pri, 0, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -414,11 +414,11 @@
 		
 		public function ChangeStat($id_local, $stat)
 		{
-			if ($stat !== "active" || $stat !== "desactive") {
+			if ($stat !== "active" || $stat !== "desactive" || $stat !== "vendu") {
 				return false;
 			}
 
-			$this->query("UPDATE local SET etat = :stat WHERE id_local = :id");
+			$this->query("UPDATE local SET etat_local = :stat WHERE id_local = :id");
 
 			$this->bind(":stat", $stat);
 			$this->bind(":id", $id_local);
@@ -433,7 +433,7 @@
 
 		public function Delete($id_local)
 		{
-			$this->query("UPDATE local SET etat = 'deleted' WHERE id_local = :id_local");
+			$this->query("UPDATE local SET etat_local = 'deleted' WHERE id_local = :id_local");
 
 			$this->bind(":id", $id_local);
 

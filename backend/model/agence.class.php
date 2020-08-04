@@ -17,8 +17,9 @@
 
 		public function GetLatest($limit = 9)
 		{
-			$this->query("SELECT * FROM agence ORDER BY id_agence DESC LIMIT :num");
+			$this->query("SELECT * FROM agence WHERE etat_agence = :etat ORDER BY id_agence DESC LIMIT :num");
 
+			$this->bind(":etat", "active");
 			$this->bind(":num", $limit);
 
 			return $this->resultSet();
@@ -43,7 +44,6 @@
 			$resp = [];
 
 			if ($res && password_verify($_POST['password'], $res->password)) {
-				// $_SESSION['agence'] = $res->id_agence;
 				// generate and insert tokken
 				$tokken = $this->GenTokken();
 				
