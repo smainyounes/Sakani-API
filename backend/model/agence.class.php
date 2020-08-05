@@ -192,7 +192,7 @@
 			}
 		}
 
-		public function UpdateProfilePic($link)
+		public function UpdateProfilePic($id_agence, $link)
 		{
 			$this->query("UPDATE agence SET img_prof = :img_prof WHERE id_agence = :id");
 			
@@ -207,7 +207,7 @@
 			}
 		}
 
-		public function ChangeCoverPic($link)
+		public function ChangeCoverPic($id_agence, $link)
 		{
 			$this->query("UPDATE agence SET img_cover = :img_cover WHERE id_agence = :id");
 			
