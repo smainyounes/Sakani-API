@@ -190,6 +190,25 @@
 			echo json_encode($json);
 		}
 
+		public function Images($id_local)
+		{
+			$mod = new model_image();
+
+			$data = $mod->GetImages($id_local);
+
+			if ($data) {
+				$json = ['status' => 'success'];
+				foreach($data as $img){
+					$json['data']['images'][] = ['id_img' => $img->id_img,
+										'img_link' => PUBLIC_URL . 'img/' . $img->link];
+				}
+
+				echo json_encode($json);
+			}else{
+				echo json_encode(['status' => 'error', 'data' => ['msg' => 'no images found']]);
+			}
+		}
+
 	}
 
  ?>
