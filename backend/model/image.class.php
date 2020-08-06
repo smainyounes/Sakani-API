@@ -28,9 +28,26 @@
 			$this->query("SELECT link FROM image WHERE id_img = :id");
 			$this->bind(":id", $id_img);
 
-			return $this->single();
+			$res = $this->single();
+			return $res->link;
 		}
 		
+		public function CheckImg($id_local, $id_img)
+		{
+			$this->query("SELECT id_img FROM image WHERE id_img = :id_img AND id_local = :id_local");
+
+			$this->bind(":id_img", $id_img);
+			$this->bind(":id_local", $id_local);
+
+			$res = $this->single();
+
+			if ($res) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
 		/**
 		 * Setters
 		 */
@@ -78,6 +95,10 @@
 
 		public function SelectMain($id_local, $id_img)
 		{
+			if ($this->CheckImg($id_local, $id_img)) {
+				return false;
+			}
+
 			$this->ResetMain($id_local);
 
 			$this->query("UPDATE image SET main = 1 WHERE id_image = :id");
