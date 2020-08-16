@@ -55,9 +55,9 @@
 			$mod = new model_agence();
 
 			if ($mod->Logout($id_agence, $tokken)) {
-				json_encode(['status' => 'success']);
+				echo json_encode(['status' => 'success']);
 			}else{
-				json_encode(['status' => 'error', 'data' => ['msg' => 'logout failed']]);
+				echo json_encode(['status' => 'error', 'data' => ['msg' => 'logout failed']]);
 			}
 		}
 
@@ -68,9 +68,9 @@
 
 				$id = $mod->Inscription();
 				if ($id) {
-					json_encode(['status' => 'success', 'data' => ['id_agence' => $id]]);
+					echo json_encode(['status' => 'success', 'data' => ['id_agence' => $id]]);
 				}else{
-					json_encode(['status' => 'error', 'data' => ['msg' => 'signup failed'] ]);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'signup failed'] ]);
 				}
 			}
 		}
@@ -83,9 +83,9 @@
 				$mod = new model_agence();
 
 				if ($mod->UpdateInfos($id_agence)) {
-					json_encode(['status' => 'success']);
+					echo json_encode(['status' => 'success']);
 				}else{
-					json_encode(['status' => 'success', 'data' => ['msg' => 'could not update infos']]);
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'could not update infos']]);
 				}
 
 			}
@@ -111,15 +111,15 @@
 						DeletePic('img/'.$img);
 					}
 					
-					json_encode(['status' => 'success', 'data' => ['img_link' => PUBLIC_URL.'img/'.$res['data']['filename']]]);
+					echo json_encode(['status' => 'success', 'data' => ['img_link' => PUBLIC_URL.'img/'.$res['data']['filename']]]);
 				}else{
 					// not inserted in DB
-					DeletePic('img/'$res['data']['filename']);
-					json_encode(['status' => 'error', 'data' => ['msg' => 'file not inserted in database']]);
+					DeletePic('img/'.$res['data']['filename']);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'file not inserted in database']]);
 				}
 			}else{
 				// not uploaded
-				json_encode($res);
+				echo json_encode($res);
 			}
 		}
 
@@ -143,15 +143,15 @@
 						DeletePic('img/'.$img);
 					}
 
-					json_encode(['status' => 'success', 'data' => ['img_link' => PUBLIC_URL.'img/'.$res['data']['filename']]]);
+					echo json_encode(['status' => 'success', 'data' => ['img_link' => PUBLIC_URL.'img/'.$res['data']['filename']]]);
 				}else{
 					// not inserted in DB
 					DeletePic('img/'.$res['data']['filename']);
-					json_encode(['status' => 'error', 'data' => ['msg' => 'file not inserted in database']]);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'file not inserted in database']]);
 				}
 			}else{
 				// not uploaded
-				json_encode($res);
+				echo json_encode($res);
 			}
 		}
 
@@ -171,19 +171,19 @@
 						// new password verified
 						if ($mod->ChangePassword($id_agence)) {
 							// password changed
-							json_encode(['status' => 'success', 'data' => ['msg' => 'password changed']]);
+							echo json_encode(['status' => 'success', 'data' => ['msg' => 'password changed']]);
 						}else{
 							// password didnt change
-							json_encode(['status' => 'error', 'data' => ['msg' => 'password didnt change']]);
+							echo json_encode(['status' => 'error', 'data' => ['msg' => 'password didnt change']]);
 						}
 						
 					}else{
 						// new password doesnt match
-						json_encode(['status' => 'error', 'data' => ['msg' => 'new password didnt match']]);
+						echo json_encode(['status' => 'error', 'data' => ['msg' => 'new password didnt match']]);
 					}
 				}else{
 					// wrong old password
-					json_encode(['status' => 'error', 'data' => ['msg' => 'Wrong password']]);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'Wrong password']]);
 				}
 			}
 		}
