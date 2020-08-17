@@ -45,7 +45,7 @@
 
 			if ($res && password_verify($_POST['password'], $res->password)) {
 				// generate and insert tokken
-				$tokken = $this->GenTokken();
+				$tokken = $this->GenTokken($res->id_agence);
 				
 				if (isset($tokken)) {
 					return ['status' => 'success', 'data' => ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken]];
