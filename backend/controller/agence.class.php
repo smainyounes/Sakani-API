@@ -34,11 +34,18 @@
 			$v->Latest($limit);
 		}
 
-		public function Detail($id_agence)
+		public function Detail($nom_url)
 		{
+
+			$tab = explode("-", $nom_url);
+
+			$id_agence = array_pop($tab);
+
+			$name = implode(" ", $tab);
+
 			$v = new view_agence();
 
-			$v->Detail($id_agence);
+			$v->Detail($id_agence, $name);
 		}
 
 		public function Login()

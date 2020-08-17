@@ -25,11 +25,12 @@
 			return $this->resultSet();
 		}
 
-		public function Detail($id_agence)
+		public function Detail($id_agence, $nom)
 		{
-			$this->query("SELECT * FROM agence WHERE id_agence = :id");
+			$this->query("SELECT * FROM agence WHERE id_agence = :id AND nom = :nom");
 
 			$this->bind(":id", $id_agence);
+			$this->bind(":nom", $nom);
 
 			return $this->single();
 		}

@@ -31,6 +31,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . $local->id_local,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 

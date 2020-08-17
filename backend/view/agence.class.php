@@ -22,6 +22,7 @@
 					'fb' => $agence->fb,
 					'img_cover' => $agence->Img_prof,
 					'img_prof' => $agence->Img_cover,
+					'nom_url' => str_replace(" ", "-", trim($agence->nom)) . $agence->id_local,
 					'date_inscription' => date("d-m-Y", strtotime($agence->date_inscription))];
 		}
 
@@ -45,9 +46,9 @@
 			echo json_encode($json);
 		}
 	
-		public function Detail($id_agence)
+		public function Detail($id_agence, $nom)
 		{
-			$data = $this->mod_agence->Detail($id_agence);
+			$data = $this->mod_agence->Detail($id_agence, $nom);
 
 			$json = [];
 
