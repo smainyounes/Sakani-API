@@ -27,6 +27,17 @@
 			}
 		}
 
+		public function Checklogin($id_agence, $tokken)
+		{
+			$mod = new model_agence();
+
+			if ($mod->CheckAgence($id_agence, $tokken)) {
+				echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in']]);
+			}else{
+				echo json_encode(['status' => 'error', 'data' => ['msg' => 'user not logged in']]);
+			}
+		}
+
 		public function Latest($limit = 9)
 		{
 			$v = new view_agence();
