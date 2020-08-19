@@ -46,7 +46,7 @@
 			echo json_encode($json);
 		}
 	
-		public function Detail($id_agence, $nom)
+		public function Detail($id_agence, $nom = null)
 		{
 			$data = $this->mod_agence->Detail($id_agence, $nom);
 

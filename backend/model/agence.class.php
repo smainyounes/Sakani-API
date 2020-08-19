@@ -27,11 +27,19 @@
 
 		public function Detail($id_agence, $nom)
 		{
-			$this->query("SELECT * FROM agence WHERE id_agence = :id AND nom = :nom");
+			$sql = "SELECT * FROM agence WHERE id_agence = :id";
+
+			if (isset($nom)) {
+				$sql .= " AND nom = :nom";
+			}
+
+			$this->query($sql);
 
 			$this->bind(":id", $id_agence);
-			$this->bind(":nom", $nom);
-
+			if (isset($nom)) {
+				$this->bind(":nom", $nom);
+			}
+			
 			return $this->single();
 		}
 
