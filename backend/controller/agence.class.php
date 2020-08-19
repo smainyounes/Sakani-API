@@ -32,7 +32,14 @@
 			$mod = new model_agence();
 
 			if ($mod->CheckAgence($id_agence, $tokken)) {
-				echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in']]);
+				$new_tokken = $mod->GenTokken($id_agence);
+				
+				if (isset($new_tokken)) {
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in', 'tokken' => $new_tokken]]);
+				}else{
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error updating tokken']]);
+				}
+				
 			}else{
 				echo json_encode(['status' => 'error', 'data' => ['msg' => 'user not logged in']]);
 			}
