@@ -25,7 +25,7 @@
 			return $this->resultSet();
 		}
 
-		public function Detail($id_agence, $nom)
+		public function Detail($id_agence, $nom = null)
 		{
 			$sql = "SELECT * FROM agence WHERE id_agence = :id";
 
