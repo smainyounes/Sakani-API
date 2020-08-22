@@ -20,8 +20,8 @@
 					'tel1' => $agence->tel1,
 					'tel2' => $agence->tel2,
 					'fb' => $agence->fb,
-					'img_cover' => $agence->Img_prof,
-					'img_prof' => $agence->Img_cover,
+					'img_prof' => $agence->Img_prof,
+					'img_cover' => $agence->Img_cover,
 					'nom_url' => str_replace(" ", "-", trim($agence->nom)) . $agence->id_local,
 					'date_inscription' => date("d-m-Y", strtotime($agence->date_inscription))];
 		}
