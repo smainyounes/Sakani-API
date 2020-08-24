@@ -57,7 +57,7 @@
 				$tokken = $this->GenTokken($res->id_agence);
 				
 				if (isset($tokken)) {
-					return ['status' => 'success', 'data' => ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken, 'nom_url' => str_replace(" ", "-", trim($res->nom)) . $res->id_local]];
+					return ['status' => 'success', 'data' => ['id_agence' => $res->id_agence, 'nom_agence' => $res->nom, 'tokken' => $tokken, 'nom_url' => str_replace(" ", "-", trim($res->nom)) . "-" . $res->id_agence]];
 				}else{
 					return ['status' => 'error', 'data' => ['msg' => 'tokken could not be generated']];
 				}
