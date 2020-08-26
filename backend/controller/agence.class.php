@@ -131,7 +131,8 @@
 				$mod = new model_agence();
 
 				if ($mod->UpdateInfos($id_agence)) {
-					echo json_encode(['status' => 'success']);
+					$data = $mpd->Detail($id_agence);
+					echo json_encode(['status' => 'success', 'data' => ['tel1' => $data->tel1, 'tel2' => $data->tel2, 'fb' => $data->fb]]);
 				}else{
 					echo json_encode(['status' => 'success', 'data' => ['msg' => 'could not update infos']]);
 				}
