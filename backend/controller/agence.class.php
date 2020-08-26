@@ -66,12 +66,35 @@
 			$v->Detail($id_agence, $name);
 		}
 
-		public function Login()
+		public function Login($full = null)
 		{
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$mod = new model_agence();
+				$data = $mod->Login();
+				if ($data) {
+					$tokken = $mod->GenTokken($data->id_agence);
 
-				echo json_encode($mod->Login());
+					if (isset($tokken)) {
+						$json = ['status' => 'success'];
+
+						if (isset($full)) {
+							$v = new view_agence();
+
+							$json['data'] = array_merge(['tokken' => $tokken], $v->JsonAgence($data));
+						}else{
+							$json['data'] = ['id_agence' => $data->id_agence, 'nom_agence' => $data->nom, 'tokken' => $tokken, 'nom_url' => str_replace(" ", "-", trim($data->nom)) . "-" . $data->id_agence];
+						}
+
+						echo json_encode($json);
+
+					}else{
+						echo json_encode(['status' => 'error', 'data' => ['msg' => 'tokken could not be generated']]);
+					}
+
+				}else{
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'wrong username or password']]);
+				}
+
 			}
 		}
 
