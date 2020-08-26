@@ -12,7 +12,7 @@
 			$this->mod_agence = new model_agence();
 		}
 
-		private function JsonAgence($agence)
+		public function JsonAgence($agence)
 		{
 			return ['id_agence' => $agence->id_agence,
 					'nom' => $agence->nom,
@@ -20,10 +20,9 @@
 					'tel1' => $agence->tel1,
 					'tel2' => $agence->tel2,
 					'fb' => $agence->fb,
-					'img_prof' => $agence->Img_prof,
-					'img_cover' => $agence->Img_cover,
-					'nom_url' => str_replace(" ", "-", trim($agence->nom)) . "-" . $agence->id_agence,
-					'date_inscription' => date("d-m-Y", strtotime($agence->date_inscription))];
+					'img_prof' => PUBLIC_URL."img/".$agence->Img_prof,
+					'img_cover' => PUBLIC_URL."img/".$agence->Img_cover,
+					'nom_url' => str_replace(" ", "-", trim($agence->nom)) . "-" . $agence->id_agence];
 		}
 
 		public function Latest($limit)
