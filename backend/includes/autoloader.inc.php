@@ -1,5 +1,9 @@
 <?php 
-	
+	// something hamid asked me to add it 
+	header("Access-Control-Allow-Origin: *");
+	header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+	header("Access-Control-Allow-Headers: Content-Type,Authorization, X-Requested-With");
+
 	// include confid
 	include 'config.inc.php';
 
@@ -7,7 +11,7 @@
 	include BACKEND_URL."/helpers/helpers.php";
 
 	// starting session
-	session_start();
+	//session_start();
 
 	// defining autoloader function
 	spl_autoload_register("myloader");
