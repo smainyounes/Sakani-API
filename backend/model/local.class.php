@@ -226,7 +226,7 @@
 		{
 			switch (strtolower($_POST['type'])) {
 				case 'appartement':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :descr, :pri, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, meuble, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :meuble, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -236,13 +236,14 @@
 					$this->bind(":nc", strip_tags(trim($_POST['nbr_chambre'])));
 					$this->bind(":et", strip_tags(trim($_POST['etage'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
-					$this->bind(":etat", "desactive");
+					$this->bind(":etat", "encours");
 					break;
 				
 				case 'villa':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard, :descr, :pri, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, etage, nbr_bain, piscine, nbr_garage, jardin, meuble, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :et, :bain, :pisc, :gar, :jard, :meuble, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -255,13 +256,14 @@
 					$this->bind(":pisc", strip_tags(trim($_POST['piscine'])));
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
-					$this->bind(":etat", "desactive");
+					$this->bind(":etat", "encours");
 					break;
 				
 				case 'arab':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :descr, :pri, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_chambre, nbr_bain, jardin, nbr_garage, meuble, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :nc, :bain, :jard, :gar, :meuble, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -272,13 +274,14 @@
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
-					$this->bind(":etat", "desactive");
+					$this->bind(":etat", "encours");
 					break;
 				
 				case 'studio':
-					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :descr, :pri, :etat)");
+					$this->query("INSERT INTO local(id_agence, wilaya, commune, type, vl, surface, nbr_bain, meuble, description_local, prix, etat_local) VALUES(:id, :wil, :com, :ty, :vl, :sur, :bain, :meuble, :descr, :pri, :etat)");
 					$this->bind(":id", $id_local);
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -286,9 +289,10 @@
 					$this->bind(":vl", strip_tags(trim($_POST['vl'])));
 					$this->bind(":sur", strip_tags(trim($_POST['surface'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
-					$this->bind(":etat", "desactive");
+					$this->bind(":etat", "encours");
 					break;
 				
 				case 'terrain':
@@ -301,7 +305,7 @@
 					$this->bind(":sur", strip_tags(trim($_POST['surface'])));
 					$this->bind(":descr", strip_tags(trim($_POST['description'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
-					$this->bind(":etat", "desactive");
+					$this->bind(":etat", "encours");
 					break;
 				
 				default:
@@ -321,7 +325,7 @@
 		{
 			switch (strtolower($_POST['type'])) {
 				case 'appartement':
-					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, etage = :et, nbr_bain = :bain, prix = :pri WHERE id_local = :id");
+					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, etage = :et, nbr_bain = :bain, prix = :pri, meuble = :meuble WHERE id_local = :id");
 
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -332,12 +336,13 @@
 					$this->bind(":et", strip_tags(trim($_POST['etage'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 
 					$this->bind(":id", $id_local);
 					break;
 				
 				case 'villa':
-					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, etage = :et, nbr_bain = :bain, piscine = :pisc, nbr_garage = :gar, jardin = :jard, prix = :pri WHERE id_local = :id");
+					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, etage = :et, nbr_bain = :bain, piscine = :pisc, nbr_garage = :gar, jardin = :jard, prix = :pri, meuble = :meuble WHERE id_local = :id");
 
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -351,12 +356,13 @@
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 
 					$this->bind(":id", $id_local);
 					break;
 				
 				case 'arab':
-					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, nbr_bain = :bain, jardin = :jard, nbr_garage = :gar, prix = :pri WHERE id_local = :id");
+					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_chambre = :nc, nbr_bain = :bain, jardin = :jard, nbr_garage = :gar, prix = :pri, meuble = :meuble WHERE id_local = :id");
 
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -368,12 +374,13 @@
 					$this->bind(":jard", strip_tags(trim($_POST['jardin'])));
 					$this->bind(":gar", strip_tags(trim($_POST['garage'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 
 					$this->bind(":id", $id_local);
 					break;
 				
 				case 'studio':
-					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_bain = :bain, prix = :pri WHERE id_local = :id");
+					$this->query("UPDATE local SET wilaya = :wil, commune = :com, type = :ty, vl = :vl, surface = :sur, nbr_bain = :bain, prix = :pri, meuble = :meuble WHERE id_local = :id");
 
 					$this->bind(":wil", strip_tags(trim($_POST['wilaya'])));
 					$this->bind(":com", strip_tags(trim($_POST['commune'])));
@@ -382,6 +389,7 @@
 					$this->bind(":sur", strip_tags(trim($_POST['surface'])));
 					$this->bind(":bain", strip_tags(trim($_POST['nbr_bain'])));
 					$this->bind(":pri", strip_tags(trim($_POST['prix'])));
+					$this->bind(":meuble", strip_tags(trim($_POST['meuble'])));
 
 					$this->bind(":id", $id_local);
 					break;

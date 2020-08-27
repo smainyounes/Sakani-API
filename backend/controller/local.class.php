@@ -137,7 +137,14 @@
 				$mod = new model_image();
 
 				if ($mod->SelectMain($id_local, $_POST['id_img'])) {
-					echo json_encode(['status' => 'success']);
+					$mod = new model_local();
+					if ($mod->ChangeStat($id_local, "active")) {
+						echo json_encode(['status' => 'success']);
+					}else{
+						echo json_encode(['status' => 'error', 'data' => ['msg' => 'etat local not changed']]);
+					}
+
+					
 				}else{
 					echo json_encode(['status' => 'error', 'data' => ['msg' => 'main img could not be changed']]);
 				}
