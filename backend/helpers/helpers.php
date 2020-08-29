@@ -71,7 +71,44 @@
 				$image = imagecreatefromgif($source);
 				break;
 		}
-	     imagejpeg($image, $destination, $quality);
+
+		$exif = exif_read_data($source);
+
+		if (isset($exif['Orientation'])) {
+			# Get orientation
+			$orientation = $exif['Orientation'];
+
+			# Manipulate image
+			switch ($orientation) {
+			    case 2:
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 3:
+			        $image = imagerotate($image, 180, 0);
+			        break;
+			    case 4:
+			        imageflip($image, IMG_FLIP_VERTICAL);
+			        break;
+			    case 5:
+			        $image = imagerotate($image, -90, 0);
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 6:
+			        $image = imagerotate($image, -90, 0);
+			        break;
+			    case 7:
+			        $image = imagerotate($image, 90, 0);
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 8:
+			        $image = imagerotate($image, 90, 0); 
+			        break;
+			}
+		}
+
+	    imagejpeg($image, $destination, $quality);
+
+	    imagedestroy($image);
 	}
 
 	function UploadPic($file, $prefix = "", $dir = "img/")
@@ -86,25 +123,36 @@
 				$file_extention = @strtolower(@end(@explode(".", $file["name"])));
 				$file_name = $prefix."_". date("YmdHis") . rand(10000, 9999999) . ".";
 
-				if ($file['size'] < (2 * 1000 * 1000)) {
-					// perfect size 
-					if (move_uploaded_file($file['tmp_name'], $dir . $file_name . $file_extention)) {
-						// file moved
-						return array('status' => 'success', 'data' => ['filename' => $file_name . $file_extention]);
-					}else{
-						return array('status' => 'error', 'data' => ['msg' => 'file could not be moved']);
-					}
-				}else{
-					// file too big so compress
-					compressImage($file["tmp_name"], $dir . $file_name . "jpeg");
-					if (file_exists($dir . $file_name . "jpeg")) {
-						// file been compressed
-						return array('status' => 'success', 'data' => ['filename' => $file_name . "jpeg"]);
-					}else{
-						// file wasnt compressed
-						return array('status' => 'error', 'data' => ['msg' => 'file could not be compressed']);
-					}					
+				$sub_quality = 20;
+				$quality = 90;
+
+				if ($file['size'] > (8 * 1000 * 1000)) {
+					return array('status' => 'error', 'data' => ['msg' => 'file too big! max 8 MB']);
 				}
+
+				if ($file['size'] > (2 * 1000 * 1000)) {
+					$quality = 80;
+				}
+
+				if ($file['size'] > (5 * 1000 * 1000)) {
+					$quality = 50;
+					$sub_quality = 10;
+				}
+
+				// normal img
+				compressImage($file["tmp_name"], $dir . $file_name . "jpeg", $quality);
+
+				// preview img
+				resizeImage($dir . $file_name . "jpeg", $dir . "preview/" . $file_name . "jpeg");
+
+				if (file_exists($dir . $file_name . "jpeg") && file_exists($dir ."preview/". $file_name . "jpeg")) {
+					// file been compressed
+					return array('status' => 'success', 'data' => ['filename' => $file_name . "jpeg"]);
+				}else{
+					// file wasnt compressed
+					return array('status' => 'error', 'data' => ['msg' => 'file could not be compressed']);
+				}		
+
 			}else{
 				// file type not accepted
 				return array('status' => 'error', 'data' => ['msg' => 'file type not accepted']);
@@ -114,5 +162,35 @@
 			return array('status' => 'error', 'data' => ['msg' => 'file could not be uploaded']);
 		}
 	}
+
+	function resizeImage($filename, $destination, $max_width = 300, $max_height = 300)
+	{
+	    list($orig_width, $orig_height) = getimagesize($filename);
+
+	    $width = $orig_width;
+	    $height = $orig_height;
+
+	    # taller
+	    if ($height > $max_height) {
+	        $width = ($max_height / $height) * $width;
+	        $height = $max_height;
+	    }
+
+	    # wider
+	    if ($width > $max_width) {
+	        $height = ($max_width / $width) * $height;
+	        $width = $max_width;
+	    }
+
+	    $image_p = imagecreatetruecolor($width, $height);
+
+	    $image = imagecreatefromjpeg($filename);
+
+	    imagecopyresized($image_p, $image, 0, 0, 0, 0, $width, $height, $orig_width, $orig_height);
+
+	    imagejpeg($image_p, $destination, 90);
+
+	    imagedestroy($image_p);
+	} 
 
  ?>
