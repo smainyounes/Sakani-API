@@ -108,7 +108,7 @@
 
 				$res = array();
 
-				$res = UploadPic($_FILES['img']);
+				$res = UploadPic($_FILES['img'], "local");
 
 				if ($res['status'] === 'success') {
 					// file uploaded
