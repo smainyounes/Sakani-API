@@ -72,7 +72,12 @@
 				break;
 		}
 
-		$exif = exif_read_data($source);
+		try {
+			$exif = exif_read_data($source);
+		} catch (Exception $e) {
+			
+		}
+		
 
 		if (isset($exif['Orientation'])) {
 			# Get orientation
@@ -123,12 +128,22 @@
 				$file_extention = @strtolower(@end(@explode(".", $file["name"])));
 				$file_name = $prefix."_". date("YmdHis") . rand(10000, 9999999) . ".";
 
-				$sub_quality = 20;
-				$quality = 90;
-
 				if ($file['size'] > (8 * 1000 * 1000)) {
 					return array('status' => 'error', 'data' => ['msg' => 'file too big! max 8 MB']);
 				}
+
+				if ($prefix !== "local") {
+					// move file no need to compress or make preview
+					if (move_uploaded_file($file["tmp_name"], $dir . $file_name . $file_extention)) {
+						return array('status' => 'success', 'data' => ['filename' => $file_name . $file_extention]);
+					}else{
+						return array('status' => 'error', 'data' => ['msg' => 'file could not be moved']);
+					}
+				}
+
+				$sub_quality = 20;
+				$quality = 90;
+
 
 				if ($file['size'] > (2 * 1000 * 1000)) {
 					$quality = 80;
