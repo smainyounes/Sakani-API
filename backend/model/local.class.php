@@ -422,7 +422,7 @@
 		
 		public function ChangeStat($id_local, $stat)
 		{
-			if ($stat !== "active" || $stat !== "desactive" || $stat !== "vendu") {
+			if ($stat !== "active" && $stat !== "desactive" && $stat !== "vendu") {
 				return false;
 			}
 

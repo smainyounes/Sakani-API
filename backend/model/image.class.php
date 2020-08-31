@@ -34,7 +34,7 @@
 		
 		public function CheckImg($id_local, $id_img)
 		{
-			$this->query("SELECT id_iamge FROM image WHERE id_image = :id_img AND id_local = :id_local");
+			$this->query("SELECT id_image FROM image WHERE id_image = :id_img AND id_local = :id_local");
 
 			$this->bind(":id_img", $id_img);
 			$this->bind(":id_local", $id_local);
@@ -95,7 +95,7 @@
 
 		public function SelectMain($id_local, $id_img)
 		{
-			if ($this->CheckImg($id_local, $id_img)) {
+			if (!$this->CheckImg($id_local, $id_img)) {
 				return false;
 			}
 
