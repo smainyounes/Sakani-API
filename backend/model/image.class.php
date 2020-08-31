@@ -25,16 +25,16 @@
 
 		public function GetImgLink($id_img)
 		{
-			$this->query("SELECT link FROM image WHERE id_img = :id");
+			$this->query("SELECT lien FROM image WHERE id_image = :id");
 			$this->bind(":id", $id_img);
 
 			$res = $this->single();
-			return $res->link;
+			return $res->lien;
 		}
 		
 		public function CheckImg($id_local, $id_img)
 		{
-			$this->query("SELECT id_img FROM image WHERE id_img = :id_img AND id_local = :id_local");
+			$this->query("SELECT id_iamge FROM image WHERE id_image = :id_img AND id_local = :id_local");
 
 			$this->bind(":id_img", $id_img);
 			$this->bind(":id_local", $id_local);
@@ -69,7 +69,7 @@
 
 		public function DeleteImg($id_img)
 		{
-			$this->query("DELETE FROM image WHERE id_img = :id");
+			$this->query("DELETE FROM image WHERE id_image = :id");
 			$this->bind(":id", $id_img);
 
 			try {

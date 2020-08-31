@@ -204,8 +204,8 @@
 			if ($data) {
 				$json = ['status' => 'success'];
 				foreach($data as $img){
-					$json['data']['images'][] = ['id_img' => $img->id_img,
-										'img_link' => PUBLIC_URL . 'img/' . $img->link];
+					$json['data']['images'][] = ['id_img' => $img->id_image,
+										'img_link' => PUBLIC_URL . 'img/' . $img->lien];
 				}
 
 				echo json_encode($json);

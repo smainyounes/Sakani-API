@@ -158,7 +158,7 @@
 
 				$mod = new model_image();
 
-				if (DeletePic("img/" . $mod->GetImgLink($id_img)) && DeletePic("img/preview" . $mod->GetImgLink($id_img))) {
+				if (DeletePic("img/" . $mod->GetImgLink($id_img)) && DeletePic("img/preview/" . $mod->GetImgLink($id_img))) {
 					if ($mod->DeleteImg($id_img)) {
 						echo json_encode(['status' => 'success']);
 					}else{
@@ -197,7 +197,7 @@
 				$data = $mod->GetImages($id_local);
 
 				foreach ($data as $img) {
-					DeletePic('img/'.$img->link);
+					DeletePic('img/'.$img->lien);
 				}
 
 				$mod->DeleteAllImgLocal($id_local);
