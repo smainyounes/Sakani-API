@@ -54,7 +54,7 @@
 
 		public function AddImg($id_local, $img_name)
 		{
-			$this->query("INSERT INTO image(id_local, link) VALUES(:id, :link)");
+			$this->query("INSERT INTO image(id_local, lien) VALUES(:id, :link)");
 			$this->bind(":id", $id_local);
 			$this->bind(":link", $img_name);
 

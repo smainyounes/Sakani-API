@@ -115,7 +115,7 @@
 					$mod = new model_image();
 
 					// insert in db
-					echo json_encode($mod->AddImg($id_local, $res['filename']));
+					echo json_encode($mod->AddImg($id_local, $res['data']['filename']));
 
 				}else{
 					echo json_encode($res);
