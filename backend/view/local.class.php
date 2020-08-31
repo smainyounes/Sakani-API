@@ -182,7 +182,7 @@
 
 		public function Detail($id_local)
 		{
-			$data = $this->local_mod->Detail($id_agence);
+			$data = $this->local_mod->Detail($id_local);
 			$json = [];
 
 			if ($data) {
