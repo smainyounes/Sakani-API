@@ -56,10 +56,17 @@
 			$v->Byagence($id_agence, $page, $owner);
 		}
 
-		public function Detail($id_local)
+		public function Detail($id_local, $id_agence = null, $tokken = null)
 		{
+			$owner = false;
+
+			if (isset($id_agence) && isset($tokken)) {
+				$this->forbidden($id_agence, $tokken, $id_local);
+				$owner = true;
+			}
+
 			$v = new view_local();
-			$v->Detail($id_local);
+			$v->Detail($id_local, $owner);
 		}
 
 		public function Addinfos()

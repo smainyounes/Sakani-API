@@ -33,12 +33,23 @@
 			return $this->resultSet();
 		}
 
-		public function Detail($id_local)
+		public function Detail($id_local, $owner)
 		{
-			$this->query("SELECT * FROM local WHERE id_local = :id AND etat_local = :etat");
+			$sql = "SELECT * FROM local WHERE id_local = :id";
+
+			$etat = "active";
+
+			if ($owner) {
+				$sql .= " AND etat_local != :etat";
+				$etat = "deleted";
+			}else{
+				$sql .= " AND etat_local = :etat";
+			}
+
+			$this->query($sql);
 
 			$this->bind(":id", $id_local);
-			$this->bind(":etat", "active");
+			$this->bind(":etat", $etat);
 
 			return $this->single();
 		}
