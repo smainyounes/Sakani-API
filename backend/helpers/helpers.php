@@ -72,12 +72,7 @@
 				break;
 		}
 
-		try {
-			$exif = exif_read_data($source);
-		} catch (Exception $e) {
-			
-		}
-		
+		$exif = @exif_read_data($source);
 
 		if (isset($exif['Orientation'])) {
 			# Get orientation
