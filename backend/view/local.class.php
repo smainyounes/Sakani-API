@@ -147,7 +147,9 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local];
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
 
 					break;
 
@@ -169,8 +171,10 @@
 								'description' => $local->description_local,
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
-								'id_agence' => $local->id_agence];
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
 
 					break;
 
@@ -190,8 +194,10 @@
 								'description' => $local->description_local,
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
-								'id_agence' => $local->id_agence];
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
 					break;
 
 				case 'studio':
@@ -207,8 +213,10 @@
 								'description' => $local->description_local,
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
-								'id_agence' => $local->id_agence];
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
 					break;
 
 				case 'terrain':
@@ -222,8 +230,10 @@
 								'description' => $local->description_local,
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
-								'id_agence' => $local->id_agence];
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
 					break;
 				
 			}

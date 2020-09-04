@@ -35,7 +35,7 @@
 
 		public function Detail($id_local, $owner)
 		{
-			$sql = "SELECT * FROM local WHERE id_local = :id";
+			$sql = "SELECT * FROM local INNER JOIN agence ON local.id_agence = agence.id_agence WHERE id_local = :id";
 
 			$etat = "active";
 
