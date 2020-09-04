@@ -134,7 +134,7 @@
 					$data = $mod->Detail($id_agence);
 					echo json_encode(['status' => 'success', 'data' => ['tel1' => $data->tel1, 'tel2' => $data->tel2, 'fb' => $data->fb]]);
 				}else{
-					echo json_encode(['status' => 'success', 'data' => ['msg' => 'could not update infos']]);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'could not update infos']]);
 				}
 
 			}
