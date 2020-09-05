@@ -296,7 +296,7 @@
 
 		}
 
-		public function Detail($id_local, $owner = false;)
+		public function Detail($id_local, $owner = false)
 		{
 			$data = $this->local_mod->Detail($id_local, $owner);
 			$json = [];
