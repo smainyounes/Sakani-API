@@ -321,7 +321,8 @@
 				$json = ['status' => 'success'];
 				foreach($data as $img){
 					$json['data']['images'][] = ['id_img' => $img->id_image,
-										'img_link' => PUBLIC_URL . 'img/' . $img->lien];
+												'img_link' => PUBLIC_URL . 'img/' . $img->lien,
+												'img_name' => $img->lien];
 				}
 
 				echo json_encode($json);
