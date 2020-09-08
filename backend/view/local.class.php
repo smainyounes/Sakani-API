@@ -247,7 +247,7 @@
 			if ($data) {
 				// there is data
 				$json["status"] = "success";
-				$json["data"]["infos"] = ['nombre_page' => ceil($this->local_mod->SearchCount($wilaya, $commune, $type, $vl) / 21)];
+				$json["data"]["infos"] = ['nombre_page' => ceil($this->local_mod->SearchCount($wilaya, $commune, $type, $vl) / 21), 'page' => $page];
 
 				foreach ($data as $local) {
 					$json["data"]["local"][] = $this->LocalJson($local);
@@ -283,7 +283,7 @@
 
 			if ($data) {
 				$json["status"] = ['status' => "success"];
-				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner) / 21)];
+				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner) / 21), 'page' => $page];
 
 				foreach ($data as $local) {
 					$json["data"]["local"][] = $this->LocalJson($local);
