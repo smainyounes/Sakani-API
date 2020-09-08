@@ -54,7 +54,7 @@
 			return $this->single();
 		}
 
-		public function ByAgence($id_agence, $page, $owner)
+		public function ByAgence($id_agence, $page, $owner, $vl, $type)
 		{
 			$limit = 21;
 			$start = ($page - 1) * $limit;
@@ -70,6 +70,14 @@
 				$etat = "active";
 			}
 
+			if ($vl !== "tout") {
+				$conc .= " AND local.vl = :vl";
+			}
+
+			if ($type !== "tout") {
+				$conc .= " AND local.type = :type";
+			}
+
 			$sql = "SELECT *, local.id_local AS id_local
 							FROM ((local
 							INNER JOIN agence ON local.id_agence = agence.id_agence)
@@ -80,6 +88,14 @@
 
 			$this->bind(":id", $id_agence);
 			$this->bind(":etat", $etat);
+
+			if ($vl !== "tout") {
+				$this->bind(":vl", $vl)
+			}
+
+			if ($type !== "tout") {
+				$this->bind(":type", $type)
+			}
 
 			return $this->resultSet();
 		}
@@ -186,7 +202,7 @@
 			return $res->nbr;
 		}
 
-		public function CountByAgence($id_agence, $owner)
+		public function CountByAgence($id_agence, $owner, $vl, $type)
 		{
 			if ($owner) {
 				$conc = "AND local.etat_local != :etat";
@@ -196,12 +212,28 @@
 				$etat = "active";
 			}
 
+			if ($vl !== "tout") {
+				$conc .= " AND local.vl = :vl";
+			}
+
+			if ($type !== "tout") {
+				$conc .= " AND local.type = :type";
+			}
+
 			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE agence.id_agence = :id $conc";
 
 			$this->query($sql);
 
 			$this->bind(":id", $id_agence);
 			$this->bind(":etat", $etat);
+
+			if ($vl !== "tout") {
+				$this->bind(":vl", $vl)
+			}
+
+			if ($type !== "tout") {
+				$this->bind(":type", $type)
+			}
 
 			$res = $this->single();
 			return $res->nbr;

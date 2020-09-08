@@ -43,7 +43,7 @@
 			$v->Search($page, $wilaya, $commune, $type, $vl);
 		}
 
-		public function Byagence($id_agence, $page = 1)
+		public function Byagence($id_agence, $page = 1, $vl = "tout", $type = "tout")
 		{
 			$owner = false;
 
@@ -53,7 +53,7 @@
 			}
 
 			$v = new view_local();
-			$v->Byagence($id_agence, $page, $owner);
+			$v->Byagence($id_agence, $page, $owner, $vl = "tout", $type = "tout");
 		}
 
 		public function Detail($id_local, $id_agence = null, $tokken = null)
