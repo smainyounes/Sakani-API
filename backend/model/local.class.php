@@ -17,13 +17,13 @@
 
 		public function GetAll($page)
 		{
-			$limit = 20;
+			$limit = 21;
 			$start = ($page - 1) * $limit;
 
 			$sql = "SELECT *, local.id_local AS id_local
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
-					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
+					LEFT JOIN image ON local.id_local = image.id_local AND image.main = 1) 
 					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
@@ -35,7 +35,7 @@
 
 		public function Detail($id_local, $owner)
 		{
-			$sql = "SELECT * FROM local INNER JOIN agence ON local.id_agence = agence.id_agence WHERE id_local = :id";
+			$sql = "SELECT * FROM local INNER JOIN agence ON local.id_agence = agence.id_agence WHERE local.id_local = :id";
 
 			$etat = "active";
 
@@ -56,7 +56,7 @@
 
 		public function ByAgence($id_agence, $page, $owner)
 		{
-			$limit = 20;
+			$limit = 21;
 			$start = ($page - 1) * $limit;
 
 			$conc = "";
@@ -73,7 +73,7 @@
 			$sql = "SELECT *, local.id_local AS id_local
 							FROM ((local
 							INNER JOIN agence ON local.id_agence = agence.id_agence)
-							LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
+							LEFT JOIN image ON local.id_local = image.id_local AND image.main = 1) 
 							WHERE agence.id_agence = :id $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
@@ -86,7 +86,7 @@
 
 		public function Search($page, $wilaya, $commune, $type, $vl)
 		{
-			$limit = 20;
+			$limit = 21;
 			$start = ($page - 1) * $limit;
 
 			$conc = "";
@@ -110,7 +110,7 @@
 			$sql = "SELECT *, local.id_local AS id_local
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
-					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
+					LEFT JOIN image ON local.id_local = image.id_local AND image.main = 1) 
 					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 $conc ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
 
 			$this->query($sql);
@@ -196,7 +196,7 @@
 				$etat = "active";
 			}
 
-			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE id_agence = :id $conc";
+			$sql = "SELECT COUNT(id_local) nbr FROM local INNER JOIN agence ON agence.id_agence = local.id_agence WHERE agence.id_agence = :id $conc";
 
 			$this->query($sql);
 

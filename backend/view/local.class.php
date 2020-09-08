@@ -32,7 +32,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 
@@ -58,7 +58,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 
@@ -82,7 +82,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
@@ -102,7 +102,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
@@ -120,8 +120,8 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
-								'img_agence' => PUBLIC_URL."img/".$local->Imgprof,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
 				
@@ -147,7 +147,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 
@@ -172,7 +172,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 
@@ -195,7 +195,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
@@ -214,7 +214,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
@@ -231,7 +231,7 @@
 								'prix' => $local->prix,
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
-								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_local,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
 								'nom_agence' => $local->nom];
 					break;
@@ -247,7 +247,7 @@
 			if ($data) {
 				// there is data
 				$json["status"] = "success";
-				$json["data"]["infos"] = ['nombre_page' => ceil($this->local_mod->SearchCount($wilaya, $commune, $type, $vl) / 20)];
+				$json["data"]["infos"] = ['nombre_page' => ceil($this->local_mod->SearchCount($wilaya, $commune, $type, $vl) / 21)];
 
 				foreach ($data as $local) {
 					$json["data"]["local"][] = $this->LocalJson($local);
@@ -283,7 +283,7 @@
 
 			if ($data) {
 				$json["status"] = ['status' => "success"];
-				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner) / 20)];
+				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner) / 21)];
 
 				foreach ($data as $local) {
 					$json["data"]["local"][] = $this->LocalJson($local);
