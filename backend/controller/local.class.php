@@ -37,7 +37,7 @@
 			$v->Latest($limit);
 		}
 
-		public function Search($page = 1, $wilaya = "tout", $commune = "tout", $type = "tout", $vl = "tout")
+		public function Search($page = 1, $wilaya = "0", $commune = "0", $type = "tout", $vl = "tout")
 		{
 			$v = new view_local();
 			$v->Search($page, $wilaya, $commune, $type, $vl);
@@ -53,7 +53,7 @@
 			}
 
 			$v = new view_local();
-			$v->Byagence($id_agence, $page, $owner, $vl = "tout", $type = "tout");
+			$v->Byagence($id_agence, $page, $owner, $vl, $type);
 		}
 
 		public function Detail($id_local, $id_agence = null, $tokken = null)

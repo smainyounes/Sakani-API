@@ -17,7 +17,7 @@
 			switch ($local->type) {
 				case 'appartement':
 					return ['id_local' => $local->id_local,
-								'img_local' => PUBLIC_URL."img/preview/".$local->lien,
+								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -40,7 +40,7 @@
 
 				case 'villa':
 					return ['id_local' => $local->id_local,
-								'img_local' => PUBLIC_URL."img/preview/".$local->lien,
+								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -66,7 +66,7 @@
 
 				case 'arab':
 					return ['id_local' => $local->id_local,
-								'img_local' => PUBLIC_URL."img/preview/".$local->lien,
+								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -89,7 +89,7 @@
 
 				case 'studio':
 					return ['id_local' => $local->id_local,
-								'img_local' => PUBLIC_URL."img/preview/".$local->lien,
+								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -109,7 +109,7 @@
 
 				case 'terrain':
 					return ['id_local' => $local->id_local,
-								'img_local' => PUBLIC_URL."img/preview/".$local->lien,
+								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 

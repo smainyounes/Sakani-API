@@ -90,11 +90,11 @@
 			$this->bind(":etat", $etat);
 
 			if ($vl !== "tout") {
-				$this->bind(":vl", $vl)
+				$this->bind(":vl", $vl);
 			}
 
 			if ($type !== "tout") {
-				$this->bind(":type", $type)
+				$this->bind(":type", $type);
 			}
 
 			return $this->resultSet();
@@ -107,11 +107,11 @@
 
 			$conc = "";
 
-			if ($wilaya !== "tout") {
+			if ($wilaya !== "0") {
 				$conc .= " AND local.wilaya = :wilaya";
 			}
 
-			if ($commune !== "tout") {
+			if ($commune !== "0") {
 				$conc .= " AND local.commune = :commune";
 			}
 
