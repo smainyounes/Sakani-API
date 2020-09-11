@@ -236,6 +236,82 @@
 				}
 			}
 		}
+
+		public function Ajoutregistre($id_agence, $tokken)
+		{
+			$this->forbidden($id_agence, $tokken);
+
+			$res = UploadPic($_FILES['img'], "regitre", "../img/");
+
+			if ($res['status'] === "success") {
+				$mod = new model_agence();
+
+				if ($mod->ImgRC($id_agence, $res['data']['filename'])) {
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'RC added successfuly']]);
+				}else{
+					// not inserted in db
+					DeletePic("../img/".$res['data']['filename']);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error adding to the database']]);
+				}
+			}else{
+				// error with file
+				echo json_encode($res);
+			}
+		}
+
+		public function Getrc($id_agence, $tokken)
+		{
+			$this->forbidden($id_agence, $tokken);
+
+			$mod = new model_agence();
+
+			$img = $mod->GetRC($id_agence);
+
+			if ($img && file_exists("../img/".$img->rc)) {
+				header('Content-type: image/jpeg');
+				readfile("../img/".$img->rc);
+			}else{
+				echo "no img";
+			}			
+		}
+
+		public function Ajouthanout($id_agence, $tokken)
+		{
+			$this->forbidden($id_agence, $tokken);
+
+			$res = UploadPic($_FILES['img'], "hanout", "../img/");
+
+			if ($res['status'] === "success") {
+				$mod = new model_agence();
+
+				if ($mod->ImgLocal($id_agence, $res['data']['filename'])) {
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'hanout added successfuly']]);
+				}else{
+					// not inserted in db
+					DeletePic("../img/".$res['data']['filename']);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error adding to the database']]);
+				}
+			}else{
+				// error with file
+				echo json_encode($res);
+			}
+		}
+
+		public function Gethanout($id_agence, $tokken)
+		{
+			$this->forbidden($id_agence, $tokken);
+
+			$mod = new model_agence();
+
+			$img = $mod->GetHanout($id_agence);
+
+			if ($img && file_exists("../img/".$img->hanout)) {
+				header('Content-type: image/jpeg');
+				readfile("../img/".$img->rc);
+			}else{
+				echo "no img";
+			}
+		}
 	}
 
  ?>

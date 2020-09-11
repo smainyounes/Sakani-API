@@ -89,6 +89,24 @@
 			}
 		}
 
+		public function GetRC($id_agence)
+		{
+			$this->query("SELECT registre AS rc FROM agence WHERE id_agence = :id");
+
+			$this->bind(":id", $id_agence);
+
+			return $this->single();
+		}
+
+		public function GetHanout($id_agence)
+		{
+			$this->query("SELECT local AS hanout FROM agence WHERE id_agence = :id");
+
+			$this->bind(":id", $id_agence);
+
+			return $this->single();
+		}
+
 		/**
 		 * Setters
 		 */
