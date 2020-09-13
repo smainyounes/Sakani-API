@@ -205,6 +205,7 @@
 
 				foreach ($data as $img) {
 					DeletePic('img/'.$img->lien);
+					DeletePic('img/preview/'.$img->lien);
 				}
 
 				$mod->DeleteAllImgLocal($id_local);
