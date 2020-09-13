@@ -17,7 +17,7 @@
 			switch ($local->type) {
 				case 'appartement':
 					return ['id_local' => $local->id_local,
-								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -40,7 +40,7 @@
 
 				case 'villa':
 					return ['id_local' => $local->id_local,
-								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -66,7 +66,7 @@
 
 				case 'arab':
 					return ['id_local' => $local->id_local,
-								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -89,7 +89,7 @@
 
 				case 'studio':
 					return ['id_local' => $local->id_local,
-								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -109,7 +109,7 @@
 
 				case 'terrain':
 					return ['id_local' => $local->id_local,
-								'img_local' => ($local->lien) ? PUBLIC_URL."img/preview/".$local->lien : "nothing",
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -133,6 +133,7 @@
 			switch ($local->type) {
 				case 'appartement':
 					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -149,12 +150,18 @@
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
-								'nom_agence' => $local->nom];
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
 
 					break;
 
 				case 'villa':
 					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -174,12 +181,18 @@
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
-								'nom_agence' => $local->nom];
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
 
 					break;
 
 				case 'arab':
 					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -197,11 +210,17 @@
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
-								'nom_agence' => $local->nom];
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
 					break;
 
 				case 'studio':
 					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -216,11 +235,17 @@
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
-								'nom_agence' => $local->nom];
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
 					break;
 
 				case 'terrain':
 					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
 								'commune' => $local->commune, 
 								'type' => $local->type, 
@@ -233,7 +258,12 @@
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
 								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
-								'nom_agence' => $local->nom];
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
 					break;
 				
 			}
