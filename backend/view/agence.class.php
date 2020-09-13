@@ -17,6 +17,7 @@
 			return ['id_agence' => $agence->id_agence,
 					'nom' => $agence->nom,
 					'address' => $agence->address,
+					'email' => $agence->email,
 					'tel1' => $agence->tel1,
 					'tel2' => $agence->tel2,
 					'fb' => $agence->fb,
