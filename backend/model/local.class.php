@@ -265,6 +265,23 @@
 			return $this->resultSet();
 		}
 
+		public function Random($limit)
+		{
+			$sql = "SELECT *, local.id_local AS id_local
+					FROM ((local
+					INNER JOIN agence ON local.id_agence = agence.id_agence)
+					LEFT JOIN image ON local.id_local = image.id_image AND image.main = 1) 
+					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY RAND() LIMIT :lim";
+
+			$this->query($sql);
+
+			$this->bind(":etat", "active");
+			$this->bind(":etat2", "active");
+			$this->bind(":lim", $limit);
+
+			return $this->resultSet();
+		}
+
 		/**
 		 * Setters
 		 */

@@ -306,6 +306,22 @@
 			echo json_encode($json);
 		}
 
+		public function Random($limit)
+		{
+			$data = $this->local_mod->Random($limit);
+			$json = [];
+
+			if ($data) {
+				$json["status"] = "success";
+				foreach ($data as $local) {
+					$json["data"]["local"][] = $this->LocalJson($local);
+				}
+			}else{
+				$json = ['status' => 'error', 'data' => ['msg' => 'no result found']];
+			}
+			echo json_encode($json);
+		}
+
 		public function Byagence($id_agence, $page, $owner, $vl, $type)
 		{
 			$data = $this->local_mod->ByAgence($id_agence, $page, $owner, $vl, $type);

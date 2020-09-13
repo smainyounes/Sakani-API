@@ -37,6 +37,12 @@
 			$v->Latest($limit);
 		}
 
+		public function Random($limit = 9)
+		{
+			$v = new view_local();
+			$v->Random($limit);
+		}
+
 		public function Search($page = 1, $wilaya = "0", $commune = "0", $type = "tout", $vl = "tout")
 		{
 			$v = new view_local();
