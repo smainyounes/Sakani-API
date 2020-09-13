@@ -25,6 +25,16 @@
 			return $this->resultSet();
 		}
 
+		public function Random($limit = 9)
+		{
+			$this->query("SELECT * FROM agence WHERE etat_agence = :etat ORDER BY RAND() LIMIT :num");
+
+			$this->bind(":etat", "active");
+			$this->bind(":num", $limit);
+
+			return $this->resultSet();
+		}
+
 		public function Detail($id_agence, $nom = null)
 		{
 			$sql = "SELECT * FROM agence WHERE id_agence = :id";

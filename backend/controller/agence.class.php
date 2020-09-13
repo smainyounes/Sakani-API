@@ -52,6 +52,13 @@
 			$v->Latest($limit);
 		}
 
+		public function Random($limit = 9)
+		{
+			$v = new view_agence();
+
+			$v->Random($limit);
+		}
+
 		public function Detail($nom_url)
 		{
 

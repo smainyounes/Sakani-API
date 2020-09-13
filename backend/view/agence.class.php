@@ -45,7 +45,27 @@
 
 			echo json_encode($json);
 		}
-	
+		
+		public function Random($limit)
+		{
+			$data = $this->mod_agence->Random($limit);
+
+			$json = [];
+
+			if ($data) {
+				$json["status"] = "success";
+
+				foreach ($data as $agence) {
+					$json["data"]["agence"][] = $this->JsonAgence($agence);
+				}
+
+			}else{
+				$json = ['status' => 'error', 'data' => ['msg' => 'no result found']];
+			}
+
+			echo json_encode($json);
+		}
+
 		public function Detail($id_agence, $nom = null)
 		{
 			$data = $this->mod_agence->Detail($id_agence, $nom);
