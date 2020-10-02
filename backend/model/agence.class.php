@@ -15,6 +15,56 @@
 		 * Getters
 		 */
 
+		public function GetAll($page, $limit)
+		{
+			// LIMIT $limit OFFSET $start
+
+			// $start = ($page - 1) * $limit;
+
+			$this->query("SELECT * FROM agence ORDER BY id_agence DESC LIMIT :num OFFSET :start");
+
+			$this->bind(":num", $limit);
+			$this->bind(":start", ($page - 1) * $limit);
+
+			return $this->resultSet();
+		}
+
+		public function Search($page, $limit, $filter, $keyword)
+		{
+			$conc = "";
+			if ($filter !== "all") {
+				$conc = "AND etat_agence = :filter";
+			}
+
+			$sql = "SELECT * FROM agence WHERE (nom LIKE :keyword OR email LIKE :keyword) $conc ORDER BY id_agence DESC LIMIT :num OFFSET :start";
+			
+
+			$this->query($sql);
+
+			if ($filter !== "all") {
+				$this->bind(":filter", $filter);
+			}
+			
+			$this->bind(":keyword", "%{$keyword}%");
+			$this->bind(":num", $limit);
+			$this->bind(":start", (($page - 1) * $limit));
+
+			return $this->resultSet();
+		}
+
+		public function CountSearch($filter, $keyword)
+		{
+			$this->query("SELECT COUNT(id_agence) nbr FROM agence WHERE etat_agence = :filter AND (nom LIKE :keyword OR email LIKE :keyword)");
+
+			$this->bind(":filter", $filter);
+			$this->bind(":keyword", "%{$keyword}%");
+
+			$res = $this->single();
+
+			return $res->nbr;
+
+		}
+
 		public function GetLatest($limit = 9)
 		{
 			$this->query("SELECT * FROM agence WHERE etat_agence = :etat ORDER BY id_agence DESC LIMIT :num");
