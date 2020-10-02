@@ -153,11 +153,11 @@
 			$this->bind(":etat2", "active");
 
 
-			if ($wilaya !== "tout") {
+			if ($wilaya !== "0") {
 				$this->bind(":wilaya", $wilaya);
 			}
 
-			if ($commune !== "tout") {
+			if ($commune !== "0") {
 				$this->bind(":commune", $commune);
 			}
 
@@ -166,7 +166,7 @@
 			}
 
 			if ($vl !== "tout") {
-				$$this->bind(":vl", $vl);
+				$this->bind(":vl", $vl);
 			}
 
 			return $this->resultSet();
@@ -176,11 +176,11 @@
 		{
 			$conc = "";
 
-			if ($wilaya !== "tout") {
+			if ($wilaya !== "0") {
 				$conc .= " AND local.wilaya = :wilaya";
 			}
 
-			if ($commune !== "tout") {
+			if ($commune !== "0") {
 				$conc .= " AND local.commune = :commune";
 			}
 
@@ -200,11 +200,11 @@
 			$this->bind(":etat2", "active");
 
 
-			if ($wilaya !== "tout") {
+			if ($wilaya !== "0") {
 				$this->bind(":wilaya", $wilaya);
 			}
 
-			if ($commune !== "tout") {
+			if ($commune !== "0") {
 				$this->bind(":commune", $commune);
 			}
 
