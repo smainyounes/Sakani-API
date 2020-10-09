@@ -213,7 +213,7 @@
 			}
 
 			if ($vl !== "tout") {
-				$$this->bind(":vl", $vl);
+				$this->bind(":vl", $vl);
 			}
 
 			$res = $this->single();

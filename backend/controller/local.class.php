@@ -221,7 +221,7 @@
 				if ($mod->Delete($id_local)) {
 					echo json_encode(['status' => 'success']);
 				}else{
-					echo json_encode(['status' => 'error']);
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'not deleted']]);
 				}
 
 			}
