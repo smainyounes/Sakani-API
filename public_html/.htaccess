@@ -1,6 +1,6 @@
 DirectoryIndex index.php
 RewriteEngine on
-RewriteBase /sakani-API/public_html/
+RewriteBase /sakani-api/public_html/
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
