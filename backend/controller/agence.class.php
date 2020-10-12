@@ -32,7 +32,8 @@
 			$mod = new model_agence();
 
 			if ($mod->CheckAgence($id_agence, $tokken)) {
-				$new_tokken = $mod->GenTokken($id_agence);
+				//$new_tokken = $mod->GenTokken($id_agence);
+				$new_tokken = $tokken;
 				
 				if (isset($new_tokken)) {
 					echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in', 'tokken' => $new_tokken]]);

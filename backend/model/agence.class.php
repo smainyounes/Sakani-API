@@ -120,7 +120,7 @@
 
 		public function CheckAgence($id_agence, $tokken)
 		{
-			$this->query("SELECT id_agence FROM agence WHERE id_agence = :id AND tokken IS NOT NULL AND tokken = :tokken");
+			$this->query("SELECT * FROM agence INNER JOIN agence_login ON agence.id_agence = agence_login.id_agence WHERE agence.id_agence = :id AND agence_login.session_tokken = :tokken");
 
 			$this->bind(":id", $id_agence);
 			$this->bind(":tokken", $tokken);
@@ -174,10 +174,12 @@
 		public function GenTokken($id_agence)
 		{
 			$tokken = token(10) . uniqid();
-			$this->query("UPDATE agence SET tokken = :tokken WHERE id_agence = :id");
+			$this->query("INSERT INTO agence_login(`id_agence`, `session_tokken`, `ip`, `infos`) VALUES(:id, :tokken, :ip, :infos)");
 
-			$this->bind(":tokken", $tokken);
 			$this->bind(":id", $id_agence);
+			$this->bind(":tokken", $tokken);
+			$this->bind(":ip", $_SERVER['REMOTE_ADDR']);
+			$this->bind(":infos", $_SERVER['HTTP_USER_AGENT']);
 
 			try {
 				$this->execute();
@@ -303,9 +305,10 @@
 		public function Logout($id_agence, $tokken)
 		{
 			if ($this->CheckAgence($id_agence, $tokken)) {
-				$this->query("UPDATE agence SET tokken = NULL WHERE id_agence = :id");
+				$this->query("DELETE FROM agence_login WHERE id_agence = :id AND session_tokken = :tokken");
 
 				$this->bind(":id", $id_agence);
+				$this->bind(":tokken", $tokken);
 
 				try {
 					$this->execute();
