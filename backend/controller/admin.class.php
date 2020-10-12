@@ -10,6 +10,11 @@
 		{
 			session_start();
 			$this->view = new view_admin();
+
+			if (!isset($_SESSION['admin'])) {
+				$this->Login();
+				die();
+			}
 		}
 
 		public function Index()
