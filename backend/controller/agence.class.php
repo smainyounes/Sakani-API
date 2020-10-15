@@ -320,6 +320,54 @@
 				echo "no img";
 			}
 		}
+
+		public function Forgottenpswd()
+		{
+			// get the posted email address
+			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+				$mod = new model_agence();
+				// gen validation
+				$res = $mod->GenValidation($_POST['email']);
+
+				if ($res['status'] === "success") {
+					// send the email
+					$link = "https://soukna-dz.com/reset-password/".$res['data']['selector'] ."/".bin2hex($res['data']['tokken']);
+					$msg = '<p>Here s your reset link:  </p>';
+					$msg .= '<a href="'.$link.'">Here</a>';
+
+					$headers = "From: Soukna-dz <test@soukna-dz.com>\r\n";
+					$headers .= "Reply-To: support@soukna-dz.com\r\n";
+					$headers .= "Content-type: text/html\r\n";
+
+					mail(strtolower($_POST['email']), "Reset Password", $msg, $headers);
+
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'email sent']]);
+				}else{
+					echo json_encode($res);
+				}
+			}
+		}
+
+		public function Resetpswd()
+		{
+			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+				$mod = new model_agence();
+
+				$res = $mod->CheckValidation($_POST['selector']), $_POST['tokken']);
+				
+				if ($res['status'] === 'error') {
+					die(json_encode($res));
+				}
+
+				if ($mod->ResetPswd($res['data']['email'])) {
+					echo json_encode(['status' => 'success']);
+				}else{
+					echo json_encode(['status' => 'error', 'data' => ['msg' => 'could not change password']]);
+				}
+
+			}
+		}
+
 	}
 
  ?>

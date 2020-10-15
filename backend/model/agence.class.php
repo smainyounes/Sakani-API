@@ -167,6 +167,52 @@
 			return $this->single();
 		}
 
+		public function CheckEmailExists($email)
+		{
+			$this->query("SELECT email FROM agence WHERE email = :email");
+
+			$this->bind(":email", strtolower($email));
+
+			$res = $this->single();
+
+			if ($res) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
+		public function CheckValidation($selector, $tokken)
+		{
+			// check if empty
+			if (empty($selector) || empty($tokken)) {
+				return ['status' => 'error', 'data' => ['msg' => 'empty tokken or selector']];
+			}
+
+			// check if data r hex
+			if (!ctype_xdigit($selector) || !ctype_xdigit($tokken)) {
+				return ['status' => 'error', 'data' => ['msg' => 'wrong tokken & selector format']];
+			}		
+
+			$current = date("U");
+
+			$this->query("SELECT * FROM `validation-tokken` WHERE selector = :selector AND exp_time >= :current");
+
+			$this->bind(":selector", $selector);
+			$this->bind(":current", $current);
+
+			$res = $this->single();
+
+			if ($res) {
+				if (password_verify(hex2bin($tokken), $res->validation)) {
+					$this->DeleteValidation($res->email);
+					return ['status' => 'success', 'data' => ['email' => $res->email]];
+				}
+			}
+
+			return ['status' => 'error', 'data' => ['msg' => 'tokken or selector not checked']];
+		}
+
 		/**
 		 * Setters
 		 */
@@ -186,6 +232,57 @@
 				return $tokken;
 			} catch (Exception $e) {
 				return null;
+			}
+		}
+
+		public function GenValidation($email)
+		{
+			// check if email exists
+			if (!$this->CheckEmailExists($email)) {
+				return ['status' => 'error', 'data' => ['msg' => 'email doesnt exists']];
+			}
+
+			// generate tokken 
+			$tokken = random_bytes(32);
+
+			// generate selector
+			$selector = bin2hex(random_bytes(8));
+
+			// generate exp_time
+			$exp_time = date("U") + 1800;
+
+			// delete old ones
+			if (!$this->DeleteValidation($email)) {
+				return ['status' => 'error', 'data' => ['msg' => 'could not delete old data']];
+			}
+			
+			// insert them in database
+			$this->query("INSERT INTO `validation-tokken`(email, selector, validation, exp_time) VALUES(:email, :selector, :validation, :exp_time)");
+
+			$this->bind(":email", strtolower($email));
+			$this->bind(":selector", $selector);
+			$this->bind(":validation", password_hash($tokken, PASSWORD_DEFAULT));
+			$this->bind(":exp_time", $exp_time);
+
+			try {
+				$this->execute();
+			} catch (Exception $e) {
+				return ['status' => 'error', 'data' => ['msg' => 'could not generate new tokken']];
+			}
+
+			// return both selector & tokken
+			return ['status' => 'success', 'data' => ['tokken' => $tokken, 'selector' => $selector, 'email' => $email]];
+		}
+
+		public function DeleteValidation($email)
+		{
+			$this->query("DELETE FROM `validation-tokken` WHERE email = :email");
+			$this->bind(":email", strtolower($email));
+			try {
+				$this->execute();
+				return true;
+			} catch (Exception $e) {
+				return false;
 			}
 		}
 
@@ -263,6 +360,31 @@
 			
 			$this->bind(":password", password_hash($_POST['password'], PASSWORD_DEFAULT));
 			$this->bind(":id", $id_agence);
+
+			try {
+				$this->execute();
+				return true;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
+		public function ResetPswd($email)
+		{
+			// check if password is sent
+			if (empty($_POST['password']) || empty($_POST['repassword'])) {
+				return false;
+			}
+
+			// check if password match
+			if ($_POST['password'] !== $_POST['repassword']) {
+				return false;
+			}
+
+			$this->query("UPDATE agence SET password = :password WHERE email = :email");
+			
+			$this->bind(":password", password_hash($_POST['password'], PASSWORD_DEFAULT));
+			$this->bind(":email", $email);
 
 			try {
 				$this->execute();
