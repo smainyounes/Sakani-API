@@ -123,11 +123,28 @@
 				$mod = new model_agence();
 
 				$id = $mod->Inscription();
-				if ($id) {
-					echo json_encode(['status' => 'success', 'data' => ['id_agence' => $id]]);
-				}else{
-					echo json_encode(['status' => 'error', 'data' => ['msg' => 'signup failed'] ]);
+
+				// error inscription
+				if (!$id) {
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'signup failed']]));
 				}
+
+				$rc = $this->Ajoutregistre($id);
+
+				if ($rc['status'] === 'error') {
+					$mod->DeleteAgence($id_agence);
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'error upload img rc']]));
+				}
+
+				$hanout = $this->Ajouthanout($id);
+
+				if ($hanout['status'] === 'error') {
+					DeletePic("../img/".$rc['data']['filename']);
+					$mod->DeleteAgence($id_agence);
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'error upload img rc']]));
+				}
+
+				echo json_encode(['status' => 'success']);
 			}
 		}
 
@@ -245,25 +262,23 @@
 			}
 		}
 
-		public function Ajoutregistre($id_agence, $tokken)
+		private function Ajoutregistre($id_agence)
 		{
-			$this->forbidden($id_agence, $tokken);
-
-			$res = UploadPic($_FILES['img'], "regitre", "../img/");
+			$res = UploadPic($_FILES['rc'], "regitre", "../img/");
 
 			if ($res['status'] === "success") {
 				$mod = new model_agence();
 
 				if ($mod->ImgRC($id_agence, $res['data']['filename'])) {
-					echo json_encode(['status' => 'success', 'data' => ['msg' => 'RC added successfuly']]);
+					return ['status' => 'success', 'data' => ['filename' => $res['data']['filename']]];
 				}else{
 					// not inserted in db
 					DeletePic("../img/".$res['data']['filename']);
-					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error adding to the database']]);
+					return ['status' => 'error', 'data' => ['msg' => 'error adding to the database']];
 				}
 			}else{
 				// error with file
-				echo json_encode($res);
+				return json_encode($res);
 			}
 		}
 
@@ -283,25 +298,23 @@
 			}			
 		}
 
-		public function Ajouthanout($id_agence, $tokken)
+		private function Ajouthanout($id_agence)
 		{
-			$this->forbidden($id_agence, $tokken);
-
-			$res = UploadPic($_FILES['img'], "hanout", "../img/");
+			$res = UploadPic($_FILES['hanout'], "hanout", "../img/");
 
 			if ($res['status'] === "success") {
 				$mod = new model_agence();
 
 				if ($mod->ImgLocal($id_agence, $res['data']['filename'])) {
-					echo json_encode(['status' => 'success', 'data' => ['msg' => 'hanout added successfuly']]);
+					return ['status' => 'success', 'data' => ['filename' => $res['data']['filename']]];
 				}else{
 					// not inserted in db
 					DeletePic("../img/".$res['data']['filename']);
-					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error adding to the database']]);
+					return ['status' => 'error', 'data' => ['msg' => 'error adding to the database']];
 				}
 			}else{
 				// error with file
-				echo json_encode($res);
+				return json_encode($res);
 			}
 		}
 
@@ -353,7 +366,7 @@
 			if ($_SERVER['REQUEST_METHOD'] === 'POST'){
 				$mod = new model_agence();
 
-				$res = $mod->CheckValidation($_POST['selector']), $_POST['tokken']);
+				$res = $mod->CheckValidation($_POST['selector'], $_POST['tokken']);
 				
 				if ($res['status'] === 'error') {
 					die(json_encode($res));

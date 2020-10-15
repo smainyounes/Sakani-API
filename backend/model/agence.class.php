@@ -307,6 +307,20 @@
 			}
 		}
 
+		public function DeleteAgence($id_agence)
+		{
+			$this->query("DELETE FROM agence WHERE id_agence = :id");
+
+			$this->bind(":id", $id_agence);
+
+			try {
+				$this->execute();
+				return true;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
 		public function ImgLocal($id_agence, $link)
 		{
 			$this->query("UPDATE agence SET local = :link WHERE id_agence = :id");
