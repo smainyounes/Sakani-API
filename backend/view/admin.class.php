@@ -964,13 +964,13 @@
 				<div class="col-md-6">
 					<?php if(isset($data->registre)): ?>
 					<div style="max-height: 300px; overflow: hidden;">
-						<img class="img-fluid" src="<?php echo(PUBLIC_URL.'admin/imgregister'.$data->registre); ?>">
+						<img class="img-fluid" src="<?php echo(PUBLIC_URL.'admin/imgregister/'.$data->registre); ?>">
 					</div>
 					<?php endif; ?>
 
 					<?php if(isset($data->local)): ?>
 					<div style="max-height: 300px; overflow: hidden;">
-						<img class="img-fluid" src="<?php echo(PUBLIC_URL.'admin/imglocal'.$data->local); ?>">
+						<img class="img-fluid" src="<?php echo(PUBLIC_URL.'admin/imglocal/'.$data->local); ?>">
 					</div>
 					<?php endif; ?>
 				</div>
