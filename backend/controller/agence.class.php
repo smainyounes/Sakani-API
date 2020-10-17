@@ -122,6 +122,10 @@
 			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$mod = new model_agence();
 
+				if ($mod->CheckEmailExists($_POST['email'])) {
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'email exists']]));
+				}
+
 				$id = $mod->Inscription();
 
 				// error inscription
@@ -139,9 +143,84 @@
 				$hanout = $this->Ajouthanout($id);
 
 				if ($hanout['status'] === 'error') {
-					DeletePic("../img/".$rc['data']['filename']);
+					DeletePic("../../img/".$rc['data']['filename']);
 					$mod->DeleteAgence($id_agence);
 					die(json_encode(['status' => 'error', 'data' => ['msg' => 'error upload img rc']]));
+				}
+				
+				$this->SendVMail(strtolower($_POST['email']));
+
+				echo json_encode(['status' => 'success']);
+			}
+		}
+
+		private function SendVMail($email)
+		{
+			$mod = new model_agence();
+			
+			// Delete all validation tokkens
+			$mod->DeleteValidation($email);
+
+			// genValidation tokken
+			$res = $mod->GenValidation($email);
+
+			if ($res['status'] === 'error') {
+				die(json_encode($res));
+			}
+
+			// send the email
+			$link = "https://soukna-dz.com/verify-email/".$res['data']['selector'] ."/".bin2hex($res['data']['tokken']);
+			$msg = '<p>Here s your verification link:  </p>';
+			$msg .= '<a href="'.$link.'">Here</a>';
+
+			$headers = "From: Soukna-dz <test@soukna-dz.com>\r\n";
+			$headers .= "Reply-To: support@soukna-dz.com\r\n";
+			$headers .= "Content-type: text/html\r\n";
+
+			mail($email, "Email verification", $msg, $headers);			
+		}
+
+		public function Resendemail($email = null)
+		{
+			if (isset($email)) {
+				$mod = new model_agence();
+
+				if (!$mod->CheckEmailExists($email)) {
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'email doesnt exists']]));
+				}
+
+				$this->SendVMail(strtolower($email));
+				die(json_encode(['status' => 'success']));
+			}
+
+			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+				$mod = new model_agence();
+
+				if (!$mod->CheckEmailExists($_POST['email'])) {
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'email doesnt exists']]));
+				}
+
+				$this->SendVMail(strtolower($_POST['email']));
+				echo json_encode(['status' => 'success']);
+			}
+
+		}
+
+		public function Verifyemail()
+		{
+			if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+				$mod = new model_agence();
+
+				$res = $mod->CheckValidation($_POST['selector'], $_POST['tokken']);
+				
+				if ($res['status'] === 'error') {
+					die(json_encode($res));
+				}
+
+				// change etat agence to pending
+				if (!$mod->SetToPending($res['data']['email'])) {
+					$this->Resendemail($res['data']['email']);
+					die(json_encode(['status' => 'error', 'data' => ['msg' => 'retry']]));
 				}
 
 				echo json_encode(['status' => 'success']);
@@ -264,7 +343,7 @@
 
 		private function Ajoutregistre($id_agence)
 		{
-			$res = UploadPic($_FILES['rc'], "regitre", "../img/");
+			$res = UploadPic($_FILES['rc'], "regitre", "../../img/");
 
 			if ($res['status'] === "success") {
 				$mod = new model_agence();
@@ -273,7 +352,7 @@
 					return ['status' => 'success', 'data' => ['filename' => $res['data']['filename']]];
 				}else{
 					// not inserted in db
-					DeletePic("../img/".$res['data']['filename']);
+					DeletePic("../../img/".$res['data']['filename']);
 					return ['status' => 'error', 'data' => ['msg' => 'error adding to the database']];
 				}
 			}else{
@@ -290,9 +369,9 @@
 
 			$img = $mod->GetRC($id_agence);
 
-			if ($img && file_exists("../img/".$img->rc)) {
+			if ($img && file_exists("../../img/".$img->rc)) {
 				header('Content-type: image/jpeg');
-				readfile("../img/".$img->rc);
+				readfile("../../img/".$img->rc);
 			}else{
 				echo "no img";
 			}			
@@ -300,7 +379,7 @@
 
 		private function Ajouthanout($id_agence)
 		{
-			$res = UploadPic($_FILES['hanout'], "hanout", "../img/");
+			$res = UploadPic($_FILES['hanout'], "hanout", "../../img/");
 
 			if ($res['status'] === "success") {
 				$mod = new model_agence();
@@ -309,7 +388,7 @@
 					return ['status' => 'success', 'data' => ['filename' => $res['data']['filename']]];
 				}else{
 					// not inserted in db
-					DeletePic("../img/".$res['data']['filename']);
+					DeletePic("../../img/".$res['data']['filename']);
 					return ['status' => 'error', 'data' => ['msg' => 'error adding to the database']];
 				}
 			}else{
@@ -326,9 +405,9 @@
 
 			$img = $mod->GetHanout($id_agence);
 
-			if ($img && file_exists("../img/".$img->hanout)) {
+			if ($img && file_exists("../../img/".$img->hanout)) {
 				header('Content-type: image/jpeg');
-				readfile("../img/".$img->rc);
+				readfile("../../img/".$img->rc);
 			}else{
 				echo "no img";
 			}

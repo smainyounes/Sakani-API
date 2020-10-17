@@ -438,6 +438,21 @@
 			}
 		}
 
+		public function SetToPending($email)
+		{
+			$this->query("UPDATE agence SET etat_agence = :etat WHERE email = :email");
+
+			$this->bind(":etat", "pending");
+			$this->bind(":email", $email);
+
+			try {
+				$this->execute();
+				return true;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
 		public function Logout($id_agence, $tokken)
 		{
 			if ($this->CheckAgence($id_agence, $tokken)) {
