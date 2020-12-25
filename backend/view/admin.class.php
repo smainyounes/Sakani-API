@@ -918,6 +918,10 @@
 					    			case 'desactive':
 					    				echo '<span class="text-warning">desactive</span>';
 					    				break;
+					    			
+					    			case 'refuse':
+					    				echo '<span class="text-danger">desactive</span>';
+					    				break;
 					    		}
 
 					    	 ?>
@@ -952,6 +956,7 @@
 					    			<option value="active" <?php if($data->etat_agence === "active") echo "selected"; ?> >active</option>
 					    			<option value="ban" <?php if($data->etat_agence === "ban") echo "selected"; ?> >ban</option>
 					    			<option value="desactive" <?php if($data->etat_agence === "desactive") echo "selected"; ?> >desactive</option>
+					    			<option value="refuse" <?php if($data->etat_agence === "refuse") echo "selected"; ?> >refuse</option>
 					    		</select>
 					    	</div>
 					    	<div class="form-group mx-2">
