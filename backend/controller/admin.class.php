@@ -140,6 +140,12 @@
 
 				if ($mod->EtatAgence($id_agence, $_POST['etat'])) {
 					$alert = ['status' => 'success', 'msg' => 'etat changed with success'];
+					
+					$mod = new model_agence();
+					$res = $mod->Detail($id_agence);
+
+					$this->SendMail($res->email, $_POST['etat']);
+
 				}else{
 					$alert = ['status' => 'error', 'msg' => 'etat could not be changed'];
 				}
@@ -214,6 +220,46 @@
 				echo "no img";
 			}
 		}
+
+		private function SendMail($email, $etat)
+		{
+			// send the email
+			$msg = '<img src="https://www.soukna-dz.com/img/logo3.png" style="max-width: 200px; margin: 30px;">';
+			$sujet = "Soukna-dz";
+			switch ($etat) {
+				case 'active':
+					$msg .= "<p style='font-size: 20px'>Salam, <br> Vous etes accepté sur notre site Soukna-dz pour plus d'information contactez nous sur: support@soukna-dz.com <br> Equipe Soukna.</p>";
+					$sujet = "Accepté Sur Soukna-dz.com";
+					break;
+
+				case 'refuse':
+					$msg .= "<p style='font-size: 20px'>Salam, <br>vous etes refusé sure notre site soukna-dz pour plus d'information contactez nous sur: support@soukna-dz.com <br> Equipe Soukna.</p>";
+					$sujet = "Refusé Sur Soukna-dz.com";
+					break;
+
+				case 'ban':
+					$msg .= "<p style='font-size: 20px'>Salam, <br>vous etes <b>BANI</b> De notre site soukna-dz pour plus d'information contactez nous sur: support@soukna-dz.com <br> Equipe Soukna.</p>";
+					$sujet = "BANI de Soukna-dz.com";
+					break;
+				
+				case 'desactive':
+					$msg .= "<p style='font-size: 20px'>Salam, <br>Votre Compte sure notre site est mis en <b>Pause</b>, pour plus d'information contactez nous sur: support@soukna-dz.com <br> Equipe Soukna.</p>";
+					$sujet = "Suspendu de Soukna-dz.com";
+					break;
+					
+				default:
+					return;
+					break;
+			}
+
+
+			$headers = "From: Soukna-dz <test@soukna-dz.com>\r\n";
+			$headers .= "Reply-To: support@soukna-dz.com\r\n";
+			$headers .= "Content-type: text/html\r\n";
+
+			mail($email, $sujet, $msg, $headers);
+		}
+
 	}
 
  ?>
