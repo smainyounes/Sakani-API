@@ -322,14 +322,14 @@
 			echo json_encode($json);
 		}
 
-		public function Byagence($id_agence, $page, $owner, $vl, $type)
+		public function Byagence($id_agence, $page, $owner, $vl, $type, $etat_local)
 		{
-			$data = $this->local_mod->ByAgence($id_agence, $page, $owner, $vl, $type);
+			$data = $this->local_mod->ByAgence($id_agence, $page, $owner, $vl, $type, $etat_local);
 			$json = [];
 
 			if ($data) {
 				$json["status"] = ['status' => "success"];
-				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner, $vl, $type) / 21), 'page' => $page];
+				$json["data"] = ['nombre_page' => ceil($this->local_mod->CountByAgence($id_agence, $owner, $vl, $type, $etat_local) / 21), 'page' => $page];
 
 				foreach ($data as $local) {
 					$json["data"]["local"][] = $this->LocalJson($local);

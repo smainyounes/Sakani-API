@@ -72,20 +72,24 @@
 			return $this->single();
 		}
 
-		public function ByAgence($id_agence, $page, $owner, $vl, $type)
+		public function ByAgence($id_agence, $page, $owner, $vl, $type, $etat_local)
 		{
 			$limit = 21;
 			$start = ($page - 1) * $limit;
 
 			$conc = "";
-			$etat = "";
 
 			if ($owner) {
-				$conc = "AND local.etat_local != :etat";
-				$etat = "deleted";
+				if ($etat_local === "tout") {
+					$conc = "AND local.etat_local != :etat_local";
+					$etat_local = "deleted";
+				}else{
+					$conc = "AND local.etat_local = :etat_local";
+				}
+				
 			}else{
-				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat";
-				$etat = "active";
+				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat_local";
+				$etat_local = "active";
 			}
 
 			if ($vl !== "tout") {
@@ -105,7 +109,11 @@
 			$this->query($sql);
 
 			$this->bind(":id", $id_agence);
-			$this->bind(":etat", $etat);
+			$this->bind(":etat_local", $etat_local);
+
+			if (!$owner) {
+				$this->bind(":etat", "active");
+			}
 
 			if ($vl !== "tout") {
 				$this->bind(":vl", $vl);
@@ -220,14 +228,19 @@
 			return $res->nbr;
 		}
 
-		public function CountByAgence($id_agence, $owner, $vl, $type)
+		public function CountByAgence($id_agence, $owner, $vl, $type, $etat_local)
 		{
 			if ($owner) {
-				$conc = "AND local.etat_local != :etat";
-				$etat = "deleted";
+				if ($etat_local === "tout") {
+					$conc = "AND local.etat_local != :etat_local";
+					$etat_local = "deleted";
+				}else{
+					$conc = "AND local.etat_local = :etat_local";
+				}
+				
 			}else{
-				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat";
-				$etat = "active";
+				$conc = "AND agence.etat_agence = :etat AND local.etat_local = :etat_local";
+				$etat_local = "active";
 			}
 
 			if ($vl !== "tout") {
@@ -243,7 +256,11 @@
 			$this->query($sql);
 
 			$this->bind(":id", $id_agence);
-			$this->bind(":etat", $etat);
+			$this->bind(":etat_local", $etat_local);
+
+			if (!$owner) {
+				$this->bind(":etat", "active");
+			}
 
 			if ($vl !== "tout") {
 				$this->bind(":vl", $vl);
