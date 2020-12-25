@@ -35,8 +35,10 @@
 				//$new_tokken = $mod->GenTokken($id_agence);
 				$new_tokken = $tokken;
 				
-				if (isset($new_tokken)) {
-					echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in', 'tokken' => $new_tokken]]);
+				$agence = $mod->Detail($id_agence);
+				
+				if (isset($new_tokken) && $agence) {
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'user logged in', 'tokken' => $new_tokken, 'etat_agence' => $agence->etat_agence]]);
 				}else{
 					echo json_encode(['status' => 'error', 'data' => ['msg' => 'error updating tokken']]);
 				}
