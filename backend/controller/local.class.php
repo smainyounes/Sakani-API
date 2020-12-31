@@ -31,6 +31,42 @@
 			}
 		}
 
+		public function CountVu($id_local)
+		{
+			if (isset($_POST['id_agence']) && isset($_POST['tokken'])){
+				$this->forbidden($_POST['id_agence'], $_POST['tokken'], $id_local);
+
+				$mod = new model_history();
+
+				$res = $mod->CountVuLocal($id_local);
+
+				echo json_encode(['status' => 'success', 'vu' => $res]);
+			}else{
+				echo  json_encode(['status' => 'error']);
+			}
+		}
+
+		public function Stats()
+		{
+			if (isset($_POST['id_agence']) && isset($_POST['tokken'])) {
+				$this->forbidden($_POST['id_agence'], $_POST['tokken']);
+
+				$mod = new model_local();
+
+				$res = $mod->Stats($_POST['id_agence']);
+
+				$json['status'] = "success";
+
+				foreach ($res as $data) {
+					$json['data'][] = [$data->etat_local => $data->nbr];
+				}
+
+				echo json_encode($json);
+			}else{
+				echo  json_encode(['status' => 'error']);
+			}
+		}
+
 		public function Latest($limit = 9)
 		{
 			$v = new view_local();
@@ -45,6 +81,15 @@
 
 		public function Search($page = 1, $wilaya = "0", $commune = "0", $type = "tout", $vl = "tout")
 		{
+			// save search history
+			if (isset($_POST['id_user']) && isset($_POST['tokken_user'])) {
+				$mod = new model_user();
+				if ($mod->CheckTokken($_POST['id_user'], $_POST['tokken_user'])) {
+					$mod = new model_history();
+					$mod->Search($_POST['id_user'], $wilaya, $commune, $type, $vl);
+				}
+			}
+
 			$v = new view_local();
 			$v->Search($page, $wilaya, $commune, $type, $vl);
 		}
@@ -69,6 +114,14 @@
 			if (isset($id_agence) && isset($tokken)) {
 				$this->forbidden($id_agence, $tokken, $id_local);
 				$owner = true;
+			}
+
+			if (isset($_POST['id_user']) && isset($_POST['tokken_user'])) {
+				$mod = new model_user();
+				if ($mod->CheckTokken($_POST['id_user'], $_POST['tokken_user'])) {
+					$mod = new model_history();
+					$mod->Detail($_POST['id_user'], $id_local);
+				}
 			}
 
 			$v = new view_local();

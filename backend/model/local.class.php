@@ -47,6 +47,20 @@
 			return $res->nbr;
 		}
 
+		public function Stats($id_agence)
+		{
+			$this->query("SELECT etat_local, COUNT(*) nbr FROM local WHERE etat_local != :etat AND id_local = :id GROUP BY etat_local");
+
+			$this->bind(":etat", "deleted");
+			$this->bind(":id", $id_agence);
+
+			try {
+				return $this->resultSet();
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+
 		public function Detail($id_local, $owner)
 		{
 			$sql = "SELECT *, local.id_local AS id_local
