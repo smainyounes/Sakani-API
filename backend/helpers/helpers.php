@@ -124,52 +124,39 @@
 				$file_name = $prefix."_". date("YmdHis") . rand(10000, 9999999) . ".";
 
 				if ($file['size'] > (8 * 1000 * 1000)) {
-					return array('status' => 'error', 'data' => ['msg' => 'file too big! max 8 MB']);
+					return ['status' => 'error', 'msg' => 'file too big! max 8 MB'];
 				}
 
 				if ($prefix !== "local") {
 					// move file no need to compress or make preview
 					if (move_uploaded_file($file["tmp_name"], $dir . $file_name . $file_extention)) {
-						return array('status' => 'success', 'data' => ['filename' => $file_name . $file_extention]);
+						return ['status' => 'success', 'data' => ['filename' => $file_name . $file_extention]];
 					}else{
-						return array('status' => 'error', 'data' => ['msg' => 'file could not be moved']);
+						return ['status' => 'error', 'msg' => 'file could not be moved'];
 					}
 				}
 
-				$sub_quality = 20;
-				$quality = 90;
-
-
-				if ($file['size'] > (2 * 1000 * 1000)) {
-					$quality = 80;
-				}
-
-				if ($file['size'] > (5 * 1000 * 1000)) {
-					$quality = 50;
-					$sub_quality = 10;
-				}
-
 				// normal img
-				compressImage($file["tmp_name"], $dir . $file_name . "jpeg", $quality);
+				resizeImage($file["tmp_name"], $dir . $file_name . "jpeg", 1200, 1200);
 
 				// preview img
 				resizeImage($dir . $file_name . "jpeg", $dir . "preview/" . $file_name . "jpeg");
 
 				if (file_exists($dir . $file_name . "jpeg") && file_exists($dir ."preview/". $file_name . "jpeg")) {
 					// file been compressed
-					return array('status' => 'success', 'data' => ['filename' => $file_name . "jpeg"]);
+					return ['status' => 'success', 'data' => ['filename' => $file_name . "jpeg"]];
 				}else{
 					// file wasnt compressed
-					return array('status' => 'error', 'data' => ['msg' => 'file could not be compressed']);
+					return ['status' => 'error', 'msg' => 'file could not be compressed'];
 				}		
 
 			}else{
 				// file type not accepted
-				return array('status' => 'error', 'data' => ['msg' => 'file type not accepted']);
+				return ['status' => 'error', 'msg' => 'file type not accepted'];
 			}
 		}else{
 			// file didnt upload
-			return array('status' => 'error', 'data' => ['msg' => 'file could not be uploaded']);
+			return ['status' => 'error', 'msg' => 'file could not be uploaded'];
 		}
 	}
 
@@ -194,7 +181,54 @@
 
 	    $image_p = imagecreatetruecolor($width, $height);
 
-	    $image = imagecreatefromjpeg($filename);
+	    $info = getimagesize($filename);
+	    switch ($info['mime']) {
+	    	case 'image/jpeg':
+	    		$image = imagecreatefromjpeg($filename);
+	    		break;
+	    	case 'image/png':
+	    		$image = imagecreatefrompng($filename);
+	    		break;
+	    	case 'image/gif':
+	    		$image = imagecreatefromgif($filename);
+	    		break;
+	    }
+
+	    $exif = @exif_read_data($filename);
+
+	    if (isset($exif['Orientation'])) {
+	    	# Get orientation
+	    	$orientation = $exif['Orientation'];
+
+	    	# Manipulate image
+	    	switch ($orientation) {
+	    	    case 2:
+	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
+	    	        break;
+	    	    case 3:
+	    	        $image = imagerotate($image, 180, 0);
+	    	        break;
+	    	    case 4:
+	    	        imageflip($image, IMG_FLIP_VERTICAL);
+	    	        break;
+	    	    case 5:
+	    	        $image = imagerotate($image, -90, 0);
+	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
+	    	        break;
+	    	    case 6:
+	    	        $image = imagerotate($image, -90, 0);
+	    	        break;
+	    	    case 7:
+	    	        $image = imagerotate($image, 90, 0);
+	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
+	    	        break;
+	    	    case 8:
+	    	        $image = imagerotate($image, 90, 0); 
+	    	        break;
+	    	}
+	    }
+
+	    
 
 	    imagecopyresized($image_p, $image, 0, 0, 0, 0, $width, $height, $orig_width, $orig_height);
 
