@@ -49,13 +49,12 @@
 
 		public function Stats($id_agence)
 		{
-			$this->query("SELECT etat_local, COUNT(*) nbr FROM local WHERE etat_local != :etat AND id_local = :id GROUP BY etat_local");
+			$this->query("SELECT SUM(CASE when etat_local = 'active' then 1 else 0 end) AS active, SUM(CASE when etat_local = 'desactive' then 1 else 0 end) AS desactive, SUM(CASE when etat_local = 'vendu' then 1 else 0 end) AS vendu FROM local WHERE id_agence = :id");
 
-			$this->bind(":etat", "deleted");
 			$this->bind(":id", $id_agence);
 
 			try {
-				return $this->resultSet();
+				return $this->single();
 			} catch (Exception $e) {
 				return false;
 			}

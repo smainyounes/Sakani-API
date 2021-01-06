@@ -48,6 +48,8 @@
 
 		public function Stats()
 		{
+			$json = ['status' => 'error'];
+
 			if (isset($_POST['id_agence']) && isset($_POST['tokken'])) {
 				$this->forbidden($_POST['id_agence'], $_POST['tokken']);
 
@@ -55,16 +57,12 @@
 
 				$res = $mod->Stats($_POST['id_agence']);
 
-				$json['status'] = "success";
-
-				foreach ($res as $data) {
-					$json['data'][] = [$data->etat_local => $data->nbr];
+				if ($res) {
+					$json = ['status' => 'success', 'data' => ['active' => $res->active, 'desactive' => $res->desactive, 'vendu' => $res->vendu]];
 				}
-
-				echo json_encode($json);
-			}else{
-				echo  json_encode(['status' => 'error']);
 			}
+
+			echo json_encode($json);
 		}
 
 		public function Latest($limit = 9)
