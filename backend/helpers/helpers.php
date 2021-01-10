@@ -162,7 +162,58 @@
 
 	function resizeImage($filename, $destination, $max_width = 300, $max_height = 300)
 	{
-	    list($orig_width, $orig_height) = getimagesize($filename);
+		$info = getimagesize($filename);
+		switch ($info['mime']) {
+			case 'image/jpeg':
+				$image = imagecreatefromjpeg($filename);
+				break;
+			case 'image/png':
+				$image = imagecreatefrompng($filename);
+				break;
+			case 'image/gif':
+				$image = imagecreatefromgif($filename);
+				break;
+		}
+
+		$exif = @exif_read_data($filename);
+
+		if (isset($exif['Orientation'])) {
+			# Get orientation
+			$orientation = $exif['Orientation'];
+
+			# Manipulate image
+			switch ($orientation) {
+			    case 2:
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 3:
+			        $image = imagerotate($image, 180, 0);
+			        break;
+			    case 4:
+			        imageflip($image, IMG_FLIP_VERTICAL);
+			        break;
+			    case 5:
+			        $image = imagerotate($image, -90, 0);
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 6:
+			        $image = imagerotate($image, -90, 0);
+			        break;
+			    case 7:
+			        $image = imagerotate($image, 90, 0);
+			        imageflip($image, IMG_FLIP_HORIZONTAL);
+			        break;
+			    case 8:
+			        $image = imagerotate($image, 90, 0); 
+			        break;
+			}
+		}
+
+		$orig_width  = imagesx($image);
+		$orig_height = imagesy($image);
+
+
+	    //list($orig_width, $orig_height) = getimagesize($filename);
 
 	    $width = $orig_width;
 	    $height = $orig_height;
@@ -180,55 +231,6 @@
 	    }
 
 	    $image_p = imagecreatetruecolor($width, $height);
-
-	    $info = getimagesize($filename);
-	    switch ($info['mime']) {
-	    	case 'image/jpeg':
-	    		$image = imagecreatefromjpeg($filename);
-	    		break;
-	    	case 'image/png':
-	    		$image = imagecreatefrompng($filename);
-	    		break;
-	    	case 'image/gif':
-	    		$image = imagecreatefromgif($filename);
-	    		break;
-	    }
-
-	    $exif = @exif_read_data($filename);
-
-	    if (isset($exif['Orientation'])) {
-	    	# Get orientation
-	    	$orientation = $exif['Orientation'];
-
-	    	# Manipulate image
-	    	switch ($orientation) {
-	    	    case 2:
-	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
-	    	        break;
-	    	    case 3:
-	    	        $image = imagerotate($image, 180, 0);
-	    	        break;
-	    	    case 4:
-	    	        imageflip($image, IMG_FLIP_VERTICAL);
-	    	        break;
-	    	    case 5:
-	    	        $image = imagerotate($image, -90, 0);
-	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
-	    	        break;
-	    	    case 6:
-	    	        $image = imagerotate($image, -90, 0);
-	    	        break;
-	    	    case 7:
-	    	        $image = imagerotate($image, 90, 0);
-	    	        imageflip($image, IMG_FLIP_HORIZONTAL);
-	    	        break;
-	    	    case 8:
-	    	        $image = imagerotate($image, 90, 0); 
-	    	        break;
-	    	}
-	    }
-
-	    
 
 	    imagecopyresized($image_p, $image, 0, 0, 0, 0, $width, $height, $orig_width, $orig_height);
 
