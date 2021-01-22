@@ -26,8 +26,25 @@
 			}
 		}
 
+		public function Limiter()
+		{
+			$this->query("SELECT COUNT(id_user) nbr FROM users WHERE DATE(first_login) = CURDATE()");
+
+			$res = $this->single();
+
+			if ($res->nbr < NEW_USERS) {
+				return true;
+			}else{
+				return false;
+			}
+		}
+
 		public function NewGuest()
 		{
+			if (!$this->Limiter()) {
+				return ['status' => 'success', 'user_tokken' => token(10) . uniqid(), 'id_user' => rand(100, 999)];
+			}
+
 			$i = 0;
 			do{
 				$i++;
