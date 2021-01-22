@@ -17,17 +17,20 @@
 
 		public function GetAll($page, $limit = 21)
 		{
+			$limit = (int) $limit;
 			$start = ($page - 1) * $limit;
 
 			$sql = "SELECT *, local.id_local AS id_local
 					FROM ((local
 					INNER JOIN agence ON local.id_agence = agence.id_agence)
 					LEFT JOIN image ON local.id_local = image.id_local AND image.main = 1) 
-					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY local.id_local DESC LIMIT $limit OFFSET $start";
+					WHERE agence.etat_agence = :etat AND local.etat_local = :etat2 ORDER BY local.id_local DESC LIMIT :lim OFFSET :start";
 
 			$this->query($sql);
 			$this->bind(":etat", "active");
 			$this->bind(":etat2", "active");
+			$this->bind(":lim", $limit);
+			$this->bind(":start", $start);
 			
 			return $this->resultSet();
 		}
