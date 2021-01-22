@@ -437,7 +437,7 @@
 
 					echo json_encode(['status' => 'success', 'data' => ['msg' => 'email sent']]);
 				}else{
-					echo json_encode($res);
+					echo json_encode(['status' => 'success', 'data' => ['msg' => 'email sent']]);
 				}
 			}
 		}
