@@ -15,5 +15,7 @@
 	define('DB_NAME', 'sakani');
 	define('DB_PASS', '');
 	
+	// limiters
+	define('NEW_USERS', 400);
 
  ?>
