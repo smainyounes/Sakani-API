@@ -15,6 +15,8 @@
 		private function LocalJson($local)
 		{
 			switch ($local->type) {
+				case 'immeuble':
+				case 'niveau':
 				case 'appartement':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
@@ -22,14 +24,14 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
-								'etage' => $local->etage, 
-								'meuble' => $local->meuble, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
+								'etage' => ($local->etage) ? $local->etage : "", 
+								'meuble' => ($local->meuble) ? $local->meuble : "", 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -45,17 +47,17 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'etage' => $local->etage, 
 								'piscine' => $local->piscine, 
 								'nbr_garage' => $local->nbr_garage, 
 								'jardin' => $local->jardin, 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -71,15 +73,15 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'nbr_garage' => $local->nbr_garage, 
 								'jardin' => $local->jardin, 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -94,12 +96,12 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -107,6 +109,8 @@
 								'nom_agence' => $local->nom];
 					break;
 
+				case 'hangar':
+				case 'usine':
 				case 'terrain':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
@@ -114,10 +118,10 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
+								'surface' => ($local->surface) ? $local->surface : "", 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -125,12 +129,58 @@
 								'nom_agence' => $local->nom];
 					break;
 				
+				case 'carcasse':
+					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
+								'wilaya' => $local->wilaya, 
+								'commune' => $local->commune, 
+								'type' => $local->type, 
+								'vente_location' => $local->vl, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
+								'etage' => $local->etage, 
+								'nbr_garage' => $local->nbr_garage, 
+								'jardin' => $local->jardin, 
+								'date' => date("d-m-Y", strtotime($local->date)), 
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
+								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
+
+					break;
+				
+				case 'arab':
+					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
+								'wilaya' => $local->wilaya, 
+								'commune' => $local->commune, 
+								'type' => $local->type, 
+								'vente_location' => $local->vl, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
+								'meuble' => $local->meuble, 
+								'date' => date("d-m-Y", strtotime($local->date)), 
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
+								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom];
+					break;
 			}
 		}
 
 		private function DetailLocalJson($local)
 		{
 			switch ($local->type) {
+				case 'immeuble':
+				case 'niveau':
 				case 'appartement':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
@@ -138,14 +188,14 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "",
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'etage' => $local->etage, 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -166,17 +216,17 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'etage' => $local->etage, 
 								'piscine' => $local->piscine, 
 								'nbr_garage' => $local->nbr_garage, 
 								'jardin' => $local->jardin, 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -197,15 +247,15 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'chambre' => $local->nbr_chambre, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "", 
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'nbr_garage' => $local->nbr_garage, 
 								'jardin' => $local->jardin, 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -225,12 +275,12 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
-								'bain' => $local->nbr_bain, 
+								'surface' => ($local->surface) ? $local->surface : "",
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -243,6 +293,8 @@
 								'fb' => $local->fb];
 					break;
 
+				case 'hangar':
+				case 'usine':
 				case 'terrain':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
@@ -250,10 +302,10 @@
 								'commune' => $local->commune, 
 								'type' => $local->type, 
 								'vente_location' => $local->vl, 
-								'surface' => $local->surface, 
+								'surface' => ($local->surface) ? $local->surface : "",
 								'date' => date("d-m-Y", strtotime($local->date)), 
-								'description' => $local->description_local,
-								'prix' => $local->prix,
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -266,6 +318,60 @@
 								'fb' => $local->fb];
 					break;
 				
+				case 'carcasse':
+					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
+								'wilaya' => $local->wilaya, 
+								'commune' => $local->commune, 
+								'type' => $local->type, 
+								'vente_location' => $local->vl, 
+								'surface' => ($local->surface) ? $local->surface : "",
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
+								'etage' => $local->etage, 
+								'nbr_garage' => $local->nbr_garage, 
+								'jardin' => $local->jardin, 
+								'date' => date("d-m-Y", strtotime($local->date)), 
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
+								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
+
+					break;
+				
+				case 'arab':
+					return ['id_local' => $local->id_local,
+								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
+								'wilaya' => $local->wilaya, 
+								'commune' => $local->commune, 
+								'type' => $local->type, 
+								'vente_location' => $local->vl, 
+								'surface' => ($local->surface) ? $local->surface : "",
+								'chambre' => ($local->nbr_chambre) ? $local->nbr_chambre : "", 
+								'bain' => ($local->nbr_bain) ? $local->nbr_bain : "", 
+								'meuble' => $local->meuble, 
+								'date' => date("d-m-Y", strtotime($local->date)), 
+								'description' => ($local->description_local) ? $local->description_local : "",
+								'prix' => ($local->prix) ? $local->prix : "",
+								'etat' => $local->etat_local,
+								'id_agence' => $local->id_agence,
+								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
+								'img_agence' => PUBLIC_URL."img/".$local->Img_prof,
+								'nom_agence' => $local->nom,
+								'address' => $local->address,
+								'email' => $local->email,
+								'tel1' => $local->tel1,
+								'tel2' => $local->tel2,
+								'fb' => $local->fb];
+					break;
 			}
 		}
 
