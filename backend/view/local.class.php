@@ -109,6 +109,7 @@
 								'nom_agence' => $local->nom];
 					break;
 
+				case 'local':
 				case 'hangar':
 				case 'usine':
 				case 'terrain':
@@ -293,6 +294,7 @@
 								'fb' => $local->fb];
 					break;
 
+				case 'local':
 				case 'hangar':
 				case 'usine':
 				case 'terrain':

@@ -410,6 +410,7 @@
 					$this->bind(":etat", "active");
 					break;
 				
+				case 'local':
 				case 'hangar':
 				case 'usine':
 				case 'terrain':
@@ -552,6 +553,7 @@
 					$this->bind(":id", $id_local);
 					break;
 				
+				case 'local':
 				case 'hangar':
 				case 'usine':
 				case 'terrain':
