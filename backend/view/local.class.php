@@ -31,7 +31,9 @@
 								'meuble' => ($local->meuble) ? $local->meuble : "", 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -57,7 +59,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -81,7 +85,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -101,7 +107,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -109,6 +117,7 @@
 								'nom_agence' => $local->nom];
 					break;
 
+				case 'autre':
 				case 'local':
 				case 'hangar':
 				case 'usine':
@@ -122,7 +131,9 @@
 								'surface' => ($local->surface) ? $local->surface : "", 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -145,7 +156,9 @@
 								'jardin' => $local->jardin, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -154,7 +167,7 @@
 
 					break;
 				
-				case 'arab':
+				case 'bungalow':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
@@ -167,7 +180,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -196,7 +211,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -227,7 +244,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -256,7 +275,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -281,7 +302,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -294,6 +317,7 @@
 								'fb' => $local->fb];
 					break;
 
+				case 'autre':
 				case 'local':
 				case 'hangar':
 				case 'usine':
@@ -307,7 +331,9 @@
 								'surface' => ($local->surface) ? $local->surface : "",
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -335,7 +361,9 @@
 								'jardin' => $local->jardin, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
@@ -349,7 +377,7 @@
 
 					break;
 				
-				case 'arab':
+				case 'bungalow':
 					return ['id_local' => $local->id_local,
 								'img_local' => ($local->lien && file_exists("img/preview/".$local->lien)) ? PUBLIC_URL."img/preview/".$local->lien : "",
 								'wilaya' => $local->wilaya, 
@@ -362,7 +390,9 @@
 								'meuble' => $local->meuble, 
 								'date' => date("d-m-Y", strtotime($local->date)), 
 								'description' => ($local->description_local) ? $local->description_local : "",
+								'papier' => ($local->papier) ? json_decode($local->papier) : [],
 								'prix' => ($local->prix) ? $local->prix : "",
+								'unit' => ($local->unit) ? $local->unit : "da",
 								'etat' => $local->etat_local,
 								'id_agence' => $local->id_agence,
 								'nom_url' => str_replace(" ", "-", trim($local->nom)) . "-" . $local->id_agence,
