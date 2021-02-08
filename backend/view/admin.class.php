@@ -741,6 +741,9 @@
 				            Etat
 				          </th>
 				          <th>
+				            VL
+				          </th>
+				          <th>
 				          	Agence
 				          </th>
 				          <?php if($all): ?>
@@ -757,6 +760,7 @@
 				        		<td><?php echo ucfirst($local->type); ?></td>
 				        		<td><?php echo $local->prix; ?></td>
 				        		<td><?php echo $local->etat_local; ?></td>
+				        		<td><?php echo $local->vl; ?></td>
 				        		<td >
 				        			<a class="d-flex align-items-center" href="<?php echo(PUBLIC_URL.'admin/agence/'.$local->id_agence) ?>">
 				        				<img class="img rounded-circle" src="<?php echo(PUBLIC_URL.'img/'.$local->Img_prof) ?>" width="50px"/>
